@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Custom Tools for Pricing testing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+		<script
+		src="https://code.jquery.com/jquery-3.7.1.js"
+		integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+		crossorigin="anonymous"></script>
+	<script>
+
+		const yesOrNo = ['Y', 'N'];
+		const isDel = ['I', '0'];
+		const title = ['Mr', 'Mrs', 'Dr', 'Ms'];
+		const facia = {
+			LO: 'Londis', 
+			BU: 'Budgens', 
+			PR: 'Premier',
+			NA: 'Non Fascia'
+		};
+		const canShop = [0, 1, 2, 3];
+		const status = ['C', 'M', 'P', 'D', 'W', 'A'];
+		const sop = [1, 2, 3, 4, 5, 6];
+		const country = {
+			EN: 'England',
+			SC: 'Scotland',
+			WA: 'Wales',
+			NI: 'Northern Ireland'
+		};
+
+		const customerInterface = [
+			{
+				field: 'customerId',
+				length: 9,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'branchId', 
+				length: 3,
+				type: 'input',
+				required: true	
+			},
+			{
+				field: 'homeBranchId',
+				length: 3,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'title',
+				length: 8,
+				type: 'select',
+				values: title,
+				required: true
+			},
+			{
+				field: 'surname',
+				length: 40,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'firstName',
+				length:	40,
+				type: 'input',
+				required: true
+				
+			},
+			{
+				field: 'tradingName',
+				length: 40,
+				type: 'input',
+				required: true	
+			},
+			{
+				field: 'street2',
+				length: 40,
+				type: 'input'
+			},
+			{
+				field: 'street3',
+				length: 40,
+				type: 'input'	
+			},
+			{
+				field: 'houseNumber',
+				length: 10,
+				type: 'input',
+				required: true	
+			},
+			{
+				field: 'street',
+				length: 60,
+				type: 'input',
+				required: true	
+			},
+			{
+				field: 'street4',
+				length: 40,
+				type: 'input'
+			},
+			{
+				field: 'street5',
+				length: 40,
+				type: 'input'
+			},
+			{
+				field: 'city',
+				length: 40,
+				type: 'input',
+				required: true,
+				default: 'Wellingborough'
+			},
+			{
+				field: 'district',
+				length: 40,
+				type: 'input',
+				required: true
+			},
+			{		
+				field: 'postCode',
+				length: 16,
+				type: 'input',
+				required: true,
+				default: 'NN81SD'
+			},
+			{
+				field: 'telephone',
+				length: 32,
+				type: 'input',
+				required: true,
+				default: '01933371000'
+				
+			},
+			{
+				field: 'mobilePhone',
+				length: 32,
+				type: 'input',
+				required: true,
+				default: '07000000000'
+			},
+			{
+				field: 'fax',
+				length: 32, 
+				type: 'input'
+			},
+			{
+				field: 'emailAddress',
+				length: 100,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'prefMail',
+				type: 'radio',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'prefTelephone',
+				type: 'radio',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'prefEmail',
+				type: 'radio',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'prefMobile',
+				type: 'radio',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'licenced',
+				type: 'radio',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'canShop',	
+				type: 'select',
+				values: canShop,
+				required: true
+			},
+			{
+				field: 'canDeliver',
+				type: 'radio',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'facia',
+				type: 'select',
+				values: facia,
+				required: true
+			},
+			{
+				field: 'classification',
+				length: 2,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'businessType',
+				length: 2,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'groupSector',
+				length: 2,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'isDel',
+				type: 'radio',
+				required: true
+			},
+			{
+				field: 'status',
+				values: status,
+				type: 'select',
+				required: true
+			},
+			{
+				field: 'onstop',
+				values: yesOrNo,
+				required: true
+			},
+			{
+				field: 'sop',
+				values: sop,
+				required: true
+			},
+			{
+				field: 'nacno', 
+				length: 6,
+				type: 'input',
+				required: true
+			},
+			{
+				field: 'vdd',
+				type: 'select',
+				required: true,
+				values: yesOrNo
+			},
+			{
+				field: 'prodCd',
+				type: 'select',
+				required: true,
+				values: yesOrNo
+			},
+			{
+				field: 'custNo',
+				length: 6,
+				type: 'input'
+			},
+			{
+				field: 'leafletScheme',
+				length: 4,
+				type: 'input'
+			},
+			{
+				field: 'salesmanCode',
+				length: 5,
+				type: 'input'
+			},
+			{
+				field: 'tobaccoClub',
+				type: 'select',
+				values: yesOrNo
+			},
+			{
+				field: 'countryCode',
+				type: 'select',
+				required: true
+			}
+		];
+
+		const heading = {
+			standard: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Promo Indicator,WSP Collect Price,Local Price Indicator,Standard WSP MIDAS FIELD,Standard WSP Delivered MIDAS FIELD,Start Date,End Date,Delivered Price,Online Exc Price,Click & Collect Price,Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,MUP WSP Collect Price,MUP Delivered Price,MUP Online Exclusive,MUP Click & Collect,MUP Spare,Promotion No,Prom Collect WSP,Prom Delivered Price,Prom Online Exclusive,Prom Click & Collect,Prom Spare,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Prom Start Date,Prom End Date',
+			fascia: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Fascia Code,Promotion No,WSP Collect Price,WSP Delivered Price,WSP Online Exclusive,WSP Click & Collect Price,WSP Spare4,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare4,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Promotion Start,Promotion End',
+			club: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Club eg H13333,WSP Collect Price,WSP Delivered Price,WSP OE Price,WSP Click & Collect Price,WSP Spare4,Recommended Retail Price,POR,Delivered POR,OE POR,Click & Collect POR,Spare POR,Start Date, End Date',
+			product: 'Depot Number,Hub,Saleable Unit Code,Child Article Code,Midas Split Number,Sell Price,Items in Saleable Unit,Promo,Unit ID,Recommended Retail Price,Pre Promotion Price,Percentage of Retail,Is New,Is Del,Lead Time Status,Price Start,Price End,Store Order Group,Londis Order Group'
+		}
+
+		const pattern = {
+			standard: {
+				regex: 
+				/^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48'
+			},
+			fascia: {
+				regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27'
+			},
+			club: {
+				regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21'
+			}
+		}
+	
+	const searchUrl = 'https://www.bookertest.co.uk/products/search?keywords=';
+	
+	
+	const licensedProducts = [
+			287939,
+			257137,
+			201393,
+			208349
+			
+		];
+
+
+		
+		const unlicensedProducts = [
+			175137,
+			287939,
+			257137,
+			134907,
+			201684,
+			205012,
+			287019,
+			233096
+		];
+		
+		const licensedOeProducts = [
+			888844,
+			888853
+		];
+		
+		const unlicensedOeProducts = [
+			888843,
+			888844,
+			888853,
+			888854
+		];
+		
+	function oeUnlicensed() {
+		unlicensedOeProducts.forEach(product => 
+			window.open(searchUrl + product)
+		);
+	}
+
+	function oeLicensed() {
+		licensedOeProducts.forEach(product => 
+			window.open(searchUrl + product)
+		);
+	}
+		
+
+	function unlicensed() {
+		unlicensedProducts.forEach(product => 
+			window.open(searchUrl + product)
+		);
+
+	}
+	
+	function licensed() {
+		licensedProducts.forEach(product =>
+			window.open(searchUrl + product)
+		);
+	}
+	
+	
+	
+	function readFile(input) {			
+
+		let file = input.files[0];
+		let reader = new FileReader();
+
+		reader.readAsText(file);
+
+		let csvData = [];
+
+		/* Clear the previous "click here to download" link if exists */
+		document.getElementById('downloadFile').innerHTML = '';
+		
+		reader.onload = function() {
+
+			let splitLines = reader.result.split(/\r\n|\n/);
+
+
+			let fileType = (file.name.includes('STDPRICE')) ? 'standard' 
+			: (file.name.includes('CLBPRICE')) ? 'club'
+			: (file.name.includes('FASPRICE')) ? 'fascia'
+			: 'none';
+
+			csvData.push(heading[fileType] + '\n');
+
+
+			splitLines.forEach(line => {
+				csvData.push(line.replace(pattern[fileType].regex, pattern[fileType].group + '\n'));
+			});
+
+			let newFile = new File(csvData, { 
+				type: 'text/csv;charset=utf-8,' 
+			});
+
+	
+			let objUrl = URL.createObjectURL(newFile);
+
+			let csvFileLink = document.createElement('a')
+			csvFileLink.setAttribute('href', objUrl)
+			csvFileLink.setAttribute('download', file.name + 'ConvertedFile.csv')
+			csvFileLink.textContent = 'Click to Download'
+
+			document.getElementById('downloadFile').append(csvFileLink);
+			
+  		};
+	}
+
+	</script>
+	<style>
+		.booker {
+      background: #2356AA;
+    }
+			
+		.booker-jumbotron {
+			background-color: #f8f8f8;
+			color: #062F6E;
+		}
+	</style>
+
+	</head>
+	<body>
+	<header>
+		<div class="container">
+			<img src="https://www.booker.co.uk/images/booker.png" class="mt-3">
+		</div>
+	</header>
+	<main>
+	<div class="jumbotron jumbotron-fluid mt-5 booker-jumbotron pt-3 pb-3">
+      <div class="container">
+        <h1>Tools</h1>
+        <p>Some web based custom tools to try and help with the pricing project testing.</p>
+      </div>
+  </div>
+	<div class="container pt-3 pb-3">
+	
+		<h3>Opening all products in one hit</h3>
+		<p>Ensure allowing pop ups in your browser is enabled</p>
+		<div class="mb-3">
+			<button class="btn btn-primary" onclick="licensed()">Licensed</button>
+			<button class="btn btn-primary" onclick="unlicensed()">Unlicensed</button>
+			<button class="btn btn-primary" onclick="oeLicensed()">OE Licensed</button>
+			<button class="btn btn-primary" onclick="oeUnlicensed()">OE Unlicensed</button>
+		</div>
+	</div>
+	<div class="container pt-3 pb-3">
+		<hr />
+	</div>
+	<div class="container pt-3 pb-3">
+		
+		<h3>File converter</h3>
+		<p>Converts (so far) standard, fascia and club pricing files downloaded from Github into readable csv format</p>
+		<div class="mb-3">
+			<label for="label" class="form-label">Price File:</label>
+			<input type="file" class="form-control" name="fileConvert" id="fileConvert" onchange="readFile(this)"/>
+		</div>
+		<div class="mb-3" id="downloadFile">
+		
+		</div>
+	</div>
+	<div class="container pt-3 pb-3">
+		<hr>
+	</div>
+		<div class="container pt-3 pb-3">
+			<h3>Customer File creator</h3>
+			<p>An attempt to make this quicker / easier?</p>
+			<!--<form class="form" name="createCustomerFile" action="#">
+			<div class="mb-3">
+				<input type="text" class="form-control" name="customerId" placeholder="Start Customer Number" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="branchId" placeholder="Web Branch ID" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="homeBranchId" placeholder="Home Branch ID" />
+			</div>
+			<div class="mb-3">
+				<select class="form-control" name="title" required>
+					<option value="">Select Title</option>
+					<option value="Mr">Mr</option>
+					<option value="Mrs">Mrs</option>
+					<option value="Miss">Miss</option>
+					<option value="Ms">Ms</option>
+					<option value="Dr">Dr</option>
+				</select>
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="surname" placeholder="Surname" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="firstName" placeholder="First Name" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="tradingName" placeholder="Trading Name" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="street2" placeholder="Street 2" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="street3" placeholder="Street 3" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="houseNumber" placeholder="House Number" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="street" placeholder="Street" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="street4" placeholder="Street 4" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="street5" placeholder="Street 5" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="city" placeholder="City" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="district" placeholder="District" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="postCode" placeholder="Post Code" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="telephone" placeholder="Telephone" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="mobilePhone" placeholder="Mobile Phone" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="fax" placeholder="Fax" />
+			</div>
+			<div class="mb-3">
+				<input type="text" class="form-control" name="emailAddress" placeholder="Email Address" />
+			</div>
+
+				<h5>Pref Mail</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefMail">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefMail" checked>
+					<label class="form-check-label" for="flexRadioDefault2">
+					  No
+					</label>
+				</div>
+				
+
+				<h5>Pref Telephone</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefTelephone">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefTelephone" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+				
+
+				<h5>Pref Email</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefEmail">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefEmail" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+				
+				<h5>Pref Mobile</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefMobile">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="prefMobile" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+				
+				<h5>Licensed</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="licenced">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="licenced" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+
+				<h5>Can Shop</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="canShop">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="canShop" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+
+				<h5>Can Deliver</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="canDeliver">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="canDeliver" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+
+				<h5>Facia Type</h5>
+				<select class="form-select" name="facia" required>
+					<option value="">Please select</option>
+					<option value="NA">Non Fascia</option>
+					<option value="LO">Londis</option>
+					<option value="PR">Premier</option>
+					<option value="BU">Budgens</option>
+				</select>
+
+			<div class="mb-3">
+				<input type="text" class="form-control" name="classification" placeholder="Classification">
+			</div>
+			
+			<div class="mb-3">
+				<input type="text" class="form-control" name="businessType" placeholder="Business Type">
+			</div>
+
+			<div class="mb-3">
+				<input type="text" class="form-control" name="groupSector" placeholder="Group Sector">
+			</div>
+
+			<div class="mb-3">
+				<h5>Is Delivered</h5>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="isDeliver">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="isDeliver" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+			</div>
+
+			<div class="mb-3">
+				<h5>Status</h5>
+					<select class="form-control" name="status">
+						<option value=""></option>
+						<option value="C">Current</option>
+						<option value="M">Marked For Deletion</option>
+						<option value="P">Provisional</option>
+						<option value="D">Web Dummy</option>
+						<option value="W">Web Provisional</option>
+					</select>
+				</div>
+			
+		
+			<h5>onstop flag</h5>
+			<div class="mb-3">
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="onstop">
+					<label class="form-check-label">
+					  Yes
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="onstop" checked>
+					<label class="form-check-label">
+					  No
+					</label>
+				</div>
+			</div>
+
+				<h5>sop flag</h5>
+				<div class="mb-3">
+					<select class="form-control" name="sop">
+						<option value=""></option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<input type="text" class="form-control" name="nationalAccNumber" placeholder="National Account Number"/>
+				</div>
+
+				vdd flag
+				<div class="mb-3">
+					<select class="form-control" name="vdd">
+						<option value=" ">Null</option>
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</div>
+
+				use prod cd
+				<div class="mb-3">
+					<select class="form-control" name="prodCd">
+						<option value=" ">Null</option>
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<input type="text" class="form-control" name="custNo" placeholder="Cust No">
+				</div>
+
+
+				brp-leaflet scheme
+				<div class="mb-3">
+					<input type="text" class="form-control" name="leafletScheme" placeholder="Leaflet Scheme"/>
+				</div>
+				salesman code
+				<div class="mb-3">
+					<input type="text" class="form-control" name="salesmanCode" />
+				</div>
+				tobacco club
+				<select class="form-control" name="tobaccoClub" required>
+					<option value=""></option>
+					<option value="Y">Yes</option>
+					<option value="N">No</option>
+				</select>
+				country code
+				<div class="mb-3">
+					<select class="form-control" name="countryCode">
+						<option value=""></option>
+						<option value="EN">England</option>
+						<option value="SC">Scotland</option>
+						<option value="WA">Wales</option>
+						<option value="NI">Northern Ireland</option>
+					</select>
+				</div>
+				<div class="mb-3">
+					<button class="btn btn-primary" type="button" name="createCustomerFile">Create Customer File</button>
+				</div>
+
+
+			</form>-->
+
+
+
+			<div id="createCustomerFile"></div>
+
+			<hr />
+
+			<h3>Pricing testing - without the matrix</h3>
+			<p>Get Prices straight from the interface files to get the latest accurate pricing.</p>
+
+		</div>
+	</main>	
+	<footer>
+	
+	</footer>
+	<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+	<script type="text/javascript" src="https://unpkg.com/babel-standalone@6/babel.js"></script>
+
+	<script type="text/babel">
+		
+    function Field(props) {
+
+			/*if (props.type == 'select') {
+				content = <select className="form-select">
+					<option selected=""></option>
+				</select>
+			}
+			if (props.type == 'input') {
+				content = <div className="input-group">
+					<input type="text" className="form-control" placeholder="" name="" />
+				</div>
+			}
+			if (props.type == 'radio') {
+				content = <div className="form-check">
+					<input type="radio" className="form-check-input" />
+				</div>
+			}*/
+
+
+		}
+
+
+
+		function App() {
+			/*return (
+				customerInterface.map(field => {
+					<Field data={100} />
+				})
+			);*/
+			<Field data={{ name: 'Lin Lanying', imageId: '1bX5QH6' }}
+      size={100} 
+			/>
+		}
+
+	
+		const container = document.getElementById('createCustomerFile');
+		const root = ReactDOM.createRoot(container);
+		root.render(<App />);
+	
+	</script>
+</body>
+</html>
