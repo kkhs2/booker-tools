@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Custom Tools for Pricing testing</title>
+    <title>Custom Tools for data processing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 		<script
 		src="https://code.jquery.com/jquery-3.7.1.js"
@@ -253,7 +253,7 @@
 			PR: 'PR - Premier Stores',
 			RO: 'RO - Rontec BRP',
 			RP: 'RP - Chef Central',
-			SL: 'SL - Club',
+			SL: 'SL - Shop Local',
 			SR: 'SR - Rontec Shop N Drive',
 			TC: 'TC - Top Caterers',
 			TP: 'TP - Tesco PFS'
@@ -520,6 +520,12 @@
 			16: '16 - Workplace'
 		};
 
+		const businessType = {
+			1: 'Retailer',
+			2: 'Caterer',
+			3: 'Small / Other Businesses'
+		};
+
 		const customerInterface = [
 			{
 				name: 'customerId',
@@ -722,7 +728,7 @@
 				type: 'select',
 				values: facia,
 				required: true,
-				placeholder: 'Fascia'
+				placeholder: 'Facia'
 			},
 			{
 				name: 'classification',
@@ -735,7 +741,8 @@
 			{
 				name: 'businessType',
 				length: 2,
-				type: 'input',
+				values: businessType,
+				type: 'select',
 				placeholder: 'Business Type',
 				required: true
 			},
@@ -792,9 +799,8 @@
 			{
 				name: 'prodCd',
 				type: 'select',
-				required: true,
 				placeholder: 'Use PROD CD',
-				values: yesOrNo
+				values: yesOrNo,
 			},
 			{
 				name: 'custNo',
@@ -805,7 +811,7 @@
 			{
 				name: 'leafletScheme',
 				length: 4,
-				type: 'input',
+				type: 'input'
 			},
 			{
 				name: 'salesmanCode',
@@ -831,90 +837,92 @@
 		];
 
 		const heading = {
-			standard: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Promo Indicator,WSP Collect Price,Local Price Indicator,Standard WSP MIDAS FIELD,Standard WSP Delivered MIDAS FIELD,Start Date,End Date,Delivered Price,Online Exc Price,Click & Collect Price,Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,MUP WSP Collect Price,MUP Delivered Price,MUP Online Exclusive,MUP Click & Collect,MUP Spare,Promotion No,Prom Collect WSP,Prom Delivered Price,Prom Online Exclusive,Prom Click & Collect,Prom Spare,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Prom Start Date,Prom End Date',
-			fascia: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Fascia Code,Promotion No,WSP Collect Price,WSP Delivered Price,WSP Online Exclusive,WSP Click & Collect Price,WSP Spare4,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare4,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Promotion Start,Promotion End',
-			club: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Club eg H13333,WSP Collect Price,WSP Delivered Price,WSP OE Price,WSP Click & Collect Price,WSP Spare4,Recommended Retail Price,POR,Delivered POR,OE POR,Click & Collect POR,Spare POR,Start Date, End Date',
-			product: 'Depot Number,Hub,Saleable Unit Code,Child Article Code,Midas Split Number,Sell Price,Items in Saleable Unit,Promo,Unit ID,Recommended Retail Price,Pre Promotion Price,Percentage of Retail,Is New,Is Del,Lead Time Status,Price Start,Price End,Store Order Group,Londis Order Group'
+			pricingstandard: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Promo Indicator,WSP Collect Price,Local Price Indicator,Standard WSP MIDAS FIELD,Standard WSP Delivered MIDAS FIELD,Start Date,End Date,Delivered Price,Online Exc Price,Click & Collect Price,Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,MUP WSP Collect Price,MUP Delivered Price,MUP Online Exclusive,MUP Click & Collect,MUP Spare,Promotion No,Prom Collect WSP,Prom Delivered Price,Prom Online Exclusive,Prom Click & Collect,Prom Spare,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Prom Start Date,Prom End Date',
+			pricingfascia: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Fascia Code,Promotion No,WSP Collect Price,WSP Delivered Price,WSP Online Exclusive,WSP Click & Collect Price,WSP Spare4,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare4,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Promotion Start,Promotion End',
+			pricingclub: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Club eg H13333,WSP Collect Price,WSP Delivered Price,WSP OE Price,WSP Click & Collect Price,WSP Spare4,Recommended Retail Price,POR,Delivered POR,OE POR,Click & Collect POR,Spare POR,Start Date, End Date',
+			product: 'PRODTRAN-STORE-ID,PRODTRAN-HUB,PRODTRAN-SUCODE,PRODTRAN-ARTICLE-CODE,PRODTRAN-MIDAS-SPLIT-NUM,PRODTRAN-PRICE,PRODTRAN-ITM-IN-SELL-UNT,PRODTRAN-PROMO,PRODTRAN-UNITID,PRODTRAN-RRP,PRODTRAN-PREV-PRC,PRODTRAN-POR,PRODTRAN-ISNEW,PRODTRAN-ISDEL,PRODTRAN-LEAD-TIME-STATUS,PRODTRAN-PRICE-START,PRODTRAN-PRICE-END,PRODTRAN-STORE-ORDER-GROUP,PRODTRAN-LONDIS-ORDER-GROUP',
+			productgroup: 'INTPRODG-ARTICLE-CODE,INTPRODG-MIDAS-SPLIT-NUM,INTPRODG-NAME,INTPRODG-CATEGORYID,INTPRODG-PACK-SIZE,INTPRODG-ISDEL,INTPRODG-WEB-PARENT-ARTICLE-CODE,INTPRODG-SUCODE,INTPRODG-LONG-NAME,INTPRODG-WEIGHT-TYPE,INTPRODG-VAT-RATE,INTPRODG-SUPPLIER,INTPRODG-PACKDESC,INTPRODG-IMAGEPAID,INTPRODG-OWNBRAND,INTPRODG-STORAGE-TYPE,INTPRODG-ARTICLE-STATUS,INTPRODG-DELIST-REASON,INTPRODG-PARENT-ARTICLE-CODE,INTPRODG-WEB FLAG,INTPRODG-LONDIS-PROD-CD,INTPRODG-BUDGENS-PROD-CD,INTPRODG-PRICE-MARK-FLAG,INTPRODG-ITM-IN-SELL-UNT,INTPRODG-SHELF-LIFE,INTPRODG-MASTER-MIDAS-CODE,INTPRODG-HFSS-HIGH',
+			tnareason: 'INTTNA-STORE-ID,INTTNA-MASTER_MCODE,INTTNA-REASON_CODE,INTTNA-REPLACEMENT_MASTER_MCODE,INTTNA-AVAILABLE_DATE',
+			longtailproduct: 'SUPPLIER-SUPPNO,MARKETPLACE-PRODUCT-CODE,SUPPLIER-OWN-ITEM-CODE,PRODUCT-DESC,BRAND-NAME,WEIGHTED,PACK-SIZE,STORAGE-TYPE,VAT-RATE%,HANDLING-TIME-DAYS,LAUNCH-DATE,BARCODE,TO-BE-SOLD-ON-WEBSITE,ITEM-IN-SELL-UNIT,WSP,RRP,WEIGHT,PRICE-PER-KG,POR,DATE-PRODUCT-LOADED,STATUS,INCOMPLETE-DATE,IN-REVIEW-DATE,SCHEDULED-DATE,LIVE-DATE,BOOKER-DELISTED-DATE,SUSPENDED-DATE,REJECTED-DATE,SUPPLIER-DELETE-DATE,WEB-SHELF-CODE,WEB-SHELF-DESC,WEB-AISLE-CODE,WEB-AISLE-DESC,WEB-DEPARTMENT-CODE,WEB-DEPARTMENT-DESC',
+			barcode: 'INTBARCD-BARCD,BARCODE-TYPE,CONSUMER-BARCODE-FLAG,PRIMARY-BARCODE-FLAG,INTBARCD-SPACES,INTBARCD-ARTICLE-CODE,INTPRODG- ISDEL',
+			pricelist: 'PRCLIST-NACNO,PRCLIST-SUCODE,PRCLIST-ARTICLE-CODE,PRCLIST-PRICE,PRCLIST-ITM-IN-SELL-UNT,PRCLIST-UNITID,PRCLIST-CUST-OWN-CODE,PRCLIST-ISDEL,PRCLIST-RSP',
+			category: 'INTCTGRY-CATEGORYID,INTCTGRY-PARENTID,INTCTGRY-NAME,INTPRODG-ISDEL,CATEGORY-TRANS-RECORD,INTCTGRY-CATEGORYID,INTCTGRY-PARENTID,INTCTGRY-NAME,INTPRODG-ISDEL,CATEGORY-TRANS-RECORD,INTCTGRY-CATEGORYID,INTCTGRY-PARENTID,INTCTGRY-NAME,INTPRODG-ISDEL',
+			barrcat: 'EXCCTGRY-NACNO,EXCCTGRY-CATEGORYID',
+			promo: 'INTPROMO-PROMO-ID,INTPROMO-CAMPAIGN-ID,INTPROMO-TYPE,INTPROMO-IMAGE-ID,INTPROMO-DESC,INTPROMO-START-DATE,INTPROMO-START-TIME,INTPROMO-END-DATE,INTPROMO-END-TIME,INTPROMO-LOYALITY-CLB-ONLY,INTPROMO-IS-ONE-TIME,INTPROMO-ISDEL',
+			promoset: 'INTPRSET-SET-ID,INTPRSET-PROMO-ID,INTPRSET-QUANTITY,INTPRSET-MAX-QUANT,INTPRSET-LOYALITY-POINTS-RWD,INTPRSET-REDUCTION,INTPRSET-DISCOUNT-QTY,INTPRSET-DISCOUNT,INTPRSET-COST-THRESHOLD,INTPRSET-COST-MULTIPLIER,INTPRSET-COST-FROM,INTPRSET-COST-TO,INTPRSET-COUPON-PROM-ID,INTPRSET-ISDEL',
+			promotostore: 'INTPRDEP-STORE-ID,INTPRDEP-PROMO-ID,INTPRDEP-ISDEL',
+			productinpromoset: 'INTPRDPR-SET-ID,INTPRDPR-SUCODE,INTPRDPR-ISDEL',
+			customer: 'INTCUST-CUSTNO,INTCUST-DATA.,INTCUST-WEB-BRANCH-ID,INTCUST-HOME-BRANCH,INTCUST-TITLE,INTCUST-SURNAME,INTCUST-FIRSTNAME,INTCUST-TRADING-NAME,INTCUST-STREET2,INTCUST-STREET3,INTCUST-HOUSE-NUMBER,INTCUST-STREET,INTCUST-STREET4,INTCUST-STREET5,INTCUST-CITY,INTCUST-DISTRICT,INTCUST-POSTCODE,INTCUST-TELEPHONE,INTCUST-MOBILE-PHONE,INTCUST-FAX,INTCUST-EMAIL-ADDRESS,INTCUST-CON-PREF-MAIL,INTCUST-CON-PREF-TELEPHONE,INTCUST-CON-PREF-EMAIL,INTCUST-CON-PREF-MOBILE,INTCUST_LICENCED,INTCUST-CAN-SHOP,INTCUST-CAN-DELIVER,INTCUST-FACIA-TYPE,INTCUST-CLASSIFICATION,INTCUST-BUSINESS-TYPE,INTCUST-GROUP-SECTOR,INTCUST-ISDEL,INTCUST-STATUS,INTCUST-ONSTOP-FLAG,INTCUST-SOP-FLAG,INTCUST-NACNO,DS_VDD_FLAG,INTCUST-USE-PROD-CD,INCUST-BRP-CUST-NO,INCUST-BRP-LEAFLET-SCHEME,INCUST-SALESMAN-CODE,INCUST-TOBACCO-CLUB',
+			custrec: 'INTCUST-CUSTNO,INTCUST-DATA.,INTCUST-WEB-BRANCH-ID,INTCUST-BUSINESS-OWNER-NAME,INTCUST-TITLE,INTCUST-SURNAME,INTCUST-FIRSTNAME,INTCUST-TRADING-NAME,INTCUST-STREET2,INTCUST-STREET3,INTCUST-HOUSE-NUMBER,INTCUST-STREET,INTCUST-STREET4,INTCUST-STREET5,INTCUST-CITY,INTCUST-DISTRICT,INTCUST-POSTCODE,INTCUST-TELEPHONE,INTCUST-MOBILE-PHONE,INTCUST-FAX,INTCUST-EMAIL-ADDRESS,INTCUST-CON-PREF-MAIL,INTCUST-CON-PREF-TELEPHONE,INTCUST-CON-PREF-EMAIL,INTCUST-CON-PREF-MOBILE,INTCUST_LICENCED,INTCUST-CLASSIFICATION,INTCUST-STATUS,INTCUST-VAT-REG-NO,INTCUST-NEW-CUSTOMER-TYPE,INTCUST-CUSTOMER-REFERRED-BY,INTCUST-CHARITY-NUMBER,INTCUST-DATE-TERMS-ACCEPTED,INTCUST-REGISTERED-BY,INTCUST-WEB-TITLE,INTCUST-WEB-FIRSTNAME,INTCUST-WEB-SURNAME,INTCUST-WEB-EMAIL-ADDRESS,INTCUST-CAN-EMAIL,INTCUST-AFILIATED-CAN-EMAIL,INTCUST-WEB-WEB-SECTOR,INTCUST-WEB-DATE-REGISTERED,INTCUST-DATE-CHANGED,INTCUST-TIME-CHANGED,INTCUST-FACIA-TYPE,PAPER-COPY-STATEMENT-FLAG,DS-ACTIVE-FLAG,DS-DATE-ACTIVE,DS-DATE-INACTIVE',
+			orders: 'INTCORD-FH-RECTYPE,INTCORD-FH-FILE-NUM,INTCORD-FH-FILE-DATE,INTCORD-FH-FILE-TIME,INTCORD-OH-RECTYPE,INTCORD-OH-STORE-ID,INTCORD-OH-CUSTNO,INTCORD-OH-ORDER-PO,INTCORD-OH-ORDER- TYPE,INTCORD-OH-ORDER-NUM,INTCORD-OH-ORDER-DATE,INTCORD-OH-ORDER-TIME,INTCORD-OH-CARD-PAID,INTCORD-OH-AUTH-AMOUNT,INTCORD-OH-AUTH-EXPIRY,INTCORD-DELIVERY-DATE,INTCORD-ORDER-SOURCE,INTCORD-CUST-PO-NBR,INTCORD-COLLECTION-TIME,INTCORD-MOBILE-NUM,INTCORD-COLLECT-DELIVERED,INTCORD-E-MAIL REQUIRED,SUPPLIER-SUPPNO,INTCORD-STORE-ORDER-GROUP,INTCORD-LONDIS-ORDER-GROUP,INTCORD-OD-RECTYPE,INTCORD-OD-SUCODE,INTCORD-OD-DESC,INTCORD-OD-ITM-IN-SELL-UNT,INTCORD-OD-PCK-SIZE,INTCORD-OD-QUANTITY,INTCORD-OD-NOTES,INTCORD-OD-PRICE,SUPPLIER-OWN-ITEM-CODE,MARKETPLACE-PRODUCT-CODE,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OT-RECTYPE,INTCORD-OT-DEPOT,INTCORD-OT-CUSTOMER-NUM,INTCORD-OT-ORDER-NUM,INTCORD-OT-DET-LINE-CNT,LINE FEED / CR,INTCORD-FL-RECTYPE,INTCORD-FL-FILE-NUM,INTCORD-FL-ORDERS-CNT',
+			confirm: 'INTSETT-STORE-ID,INTSETT-CUSTOMER-NUM,INTSETT-ORDER-NUM,INTSETT-TOTAL-INC-VAT,INTSETT-CARD-TYPE,INTSETT-CONF_IND,INTSETT-DATE,INTSETT-TIME',
+			depot: 'INTDEPOT-STORE,INTDEPOT-STORE-ID,INTDEPOT-HUB-ID,INTDEPOT-NAME,INTDEPOT-ADDR1,INTDEPOT-ADDR2,INTDEPOT-ADDR3,INTDEPOT-ADDR4,INTDEPOT-ADDR5,INTDEPOT-ADDR6,INTDEPOT-CONTACT,INTDEPOT-EMAIL,INTDEPOT-TEL,INTDEPOT-FAX,INTDEPOT-ISDEL,INTDEPOT-COUNTRY',
+			ohrs: 'INTOHRS-STORE,INTOHRS-STORE-ID,INTOHRS-TW-WC,INTOHRS-TW-MON-OPEN-HR,INTOHRS-TW-MON-CLOSE-HR,INTOHRS-TW-TUE-OPEN-HR,INTOHRS-TW-TUE-CLOSE-HR,INTOHRS-TW-WED-OPEN-HR,INTOHRS-TW-WED-CLOSE-HR,INTOHRS-TW-THU-OPEN-HR,INTOHRS-TW-THU-CLOSE-HR,INTOHRS-TW-FRI-OPEN-HR,INTOHRS-TW-FRI-CLOSE-HR,INTOHRS-TW-SAT-OPEN-HR,INTOHRS-TW-SAT-CLOSE-HR,INTOHRS-TW-SUN-OPEN-HR,INTOHRS-TW-SUN-CLOSE-HR,INTOHRS-NW-WC,INTOHRS-NW-MON-OPEN-HR,INTOHRS-NW-MON-CLOSE-HR,INTOHRS-NW-TUE-OPEN-HR,INTOHRS-NW-TUE-CLOSE-HR,INTOHRS-NW-WED-OPEN-HR,INTOHRS-NW-WED-CLOSE-HR,INTOHRS-NW-THU-OPEN-HR,INTOHRS-NW-THU-CLOSE-HR,INTOHRS-NW-FRI-OPEN-HR,INTOHRS-NW-FRI-CLOSE-HR,INTOHRS-NW-SAT-OPEN-HR,INTOHRS-NW-SAT-CLOSE-HR,INTOHRS-NW-SUN-OPEN-HR,INTOHRS-NW-SUN-CLOSE-HR',
+			supplier: 'SUPPLIER-SUPPNO,SUPPLIER-SUPPNAME,SUPPLIER-SUPPSTATUS,SUPPLIER-STREET-2,SUPPLIER-STREET-3,SUPPLIER-STREET-NO,SUPPLIER-STREET-4,SUPPLIER-STREET-5,SUPPLIER-TOWN,SUPPLIER-COUNTY,SUPPLIER-POSTCODE,SUPPLIER-CONTACT-TITLE,SUPPLIER-CONTACT-INITS,SUPPLIER-CONTACT-SURNAME,SUPPLIER-TELEPHONE,SUPPLIER-MOBILE-PHONE,SUPPLIER-LT-EMAIL,SUPPLIER-LONGTAIL-TYPE',
+			longtailsupplier: 'SUPPLIER-SUPPNO,SUPPLIER-LONGTAIL-TYPE,MIN-ORDER-QTY,MIN-ORDER-VAL,MIN-ORDER-RULE-FLAG,PRICE-ON-DELIVERY-OR-ORDER,LT_EMAIL,ORDER_COLLECTION_METHOD,LT_ORDER_EMAIL,LT_TELEPHONE',
+			dropshipsuppcust: 'INTCUST-CUSTNO,SUPPLIER-SUPPNO,SUPP-CUST-RELATIONSHIP-STATUS,CUSTOMER-REQUEST-DT,APPROVAL-DT,DISAPPROVED-DT',
+			natacc: 'INTNAC-NACNO,INTNAC-NAME,INTNAC- BUSINESS NAME,INTNAC-PRICE-MARK,INTNAC-EXTRA-FILL,INTNAC-SUBS,INTNAC-ORDER-OUTSIDE-RANGE',
+			brpschedule: 'ORDCUT-CUSTNO,ORDCUT-FACIA-TYPE,ORDCUT-STORE-ORDER-GROUP,ORDCUT-LONDIS-ORDER-GROUP,ORDCUT-WK-COM-DATE,ORDCUT-CUT-OFF-DATE,ORDCUT-CUT-OFF-TIME,ORDCUT-SOURCE-TIME,ORDCUT-DELIVERY-DATE,ORDCUT-DELIVERY-TIME',
+			brpstatements: 'INTBRPSTATEMENTS-CUSTOMER-NUMBER,INTBRPSTATEMENTS-STATEMENT-DATE,INTBRPSTATEMENTS-STATEMENT-NUMBER,INTBRPSTATEMENTS-VAT-INVOICE-NUMBER,INTBRPSTATEMENTS-INVOICE-TOTAL-GOODS-THIS-WEEK,INTBRPSTATEMENTS-PAYMENT-DUE-DATE',
+			dropshipsummary: 'DSRS-STORE-ID,DSRS-CUSTNO,DSRS-STATEMENT-DATE,DSRS-TOTAL GOODS,DSRS-TOTAL-VAT,DSRS-INVOICE-TOTAL,DSRS-INVOICE-COUNT',
+			history: 'INTPURCH-INVOICE-DATE,INTPURCH-STORE-ID,INTPURCH-SUCODE,INTPURCH-CUSTNO,INTPURCH-QUANTITY',
+			bestsellers: 'INTCATSET-GROUP-SECTOR,INTCATSET-SUCODE,INTCATSET-QUANTITY',
+			vatsummary: 'INTSUMM-STORE-ID,INTSUMM-CUSTNO,INTSUMM-DATE,INTSUMM-HOUR,INTSUMM-MINS,INTSUMM-INVOICE-NO,INTSUMM-PO-NO,INTSUMM-VAT-RATE-A,SIGN,INTSUMM-VAT-A-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-A-VAT-AMOUNT,INTSUMM-VAT-RATE-B,SIGN,INTSUMM-VAT-B-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-B-VAT-AMOUNT,INTSUMM-VAT-RATE-C,SIGN,INTSUMM-VAT-C-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-C-VAT-AMOUNT,INTSUMM-VAT-RATE-D,SIGN,INTSUMM-VAT-D-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-D-VAT-AMOUNT,INTSUMM-VAT-RATE-E,SIGN,INTSUMM-VAT-E-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-E-VAT-AMOUNT,SIGN,INTSUMM-TOTAL-NET,SIGN,INTSUMM-TOTAL-VAT,SIGN,INTSUMM-TOTAL-INVOICE,SIGN,INTSUMM-TOTAL-QTY',
+			sapvatsummary: 'INTSUMM-STORE-ID,INTSUMM-CUSTNO,INTSUMM-DATE,INTSUMM-HOUR,INTSUMM-MINS,INTSUMM-INVOICE-NO,INTSUMM-PO-NO,INTSUMM-VAT-RATE-A,SIGN,INTSUMM-VAT-A-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-A-VAT-AMOUNT,INTSUMM-VAT-RATE-B,SIGN,INTSUMM-VAT-B-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-B-VAT-AMOUNT,INTSUMM-VAT-RATE-C,SIGN,INTSUMM-VAT-C-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-C-VAT-AMOUNT,INTSUMM-VAT-RATE-D,SIGN,INTSUMM-VAT-D-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-D-VAT-AMOUNT,INTSUMM-VAT-RATE-E,SIGN,INTSUMM-VAT-E-TOTAL-EX-VAT,SIGN,INTSUMM-VAT-E-VAT-AMOUNT,SIGN,INTSUMM-TOTAL-NET,SIGN,INTSUMM-TOTAL-VAT,SIGN,INTSUMM-TOTAL-INVOICE,SIGN,INTSUMM-TOTAL-QTY',
+			longtailsummary: 'LTSUMM-STORE-ID,LTSUMM-CUSTNO,LTSUMM-DATE,LTSUMM-SUPPLIER-INVOICE-NO,LTSUMM-SUPPLIER-SUPPNO,LTSUMM-PO-NO,LTSUMM-VAT-RATE-A,SIGN,LTSUMM-VAT-A-TOTAL-EX-VAT,SIGN,LTSUMM-VAT-A-VAT-AMOUNT,LTSUMM-VAT-RATE-B,SIGN,LTSUMM-VAT-B-TOTAL-EX-VAT,SIGN,LTSUMM-VAT-B-VAT-AMOUNT,LTSUMM-VAT-RATE-C,SIGN,LTSUMM-VAT-C-TOTAL-EX-VAT,SIGN,LTSUMM-VAT-C-VAT-AMOUNT,LTSUMM-VAT-RATE-D,SIGN,LTSUMM-VAT-D-TOTAL-EX-VAT,SIGN,LTSUMM-VAT-D-VAT-AMOUNT,LTSUMM-VAT-RATE-E,SIGN,LTSUMM-VAT-E-TOTAL-EX-VAT,SIGN,LTSUMM-VAT-E-VAT-AMOUNT,SIGN,LTSUMM-RTOTAL-QTY',
+			spendandsave: 'PERIOD NO,CUSTOMER NO,LINKED,TOTAL SPEND,TOB TOTAL SPEND,NONTOB TOTAL SPEND,CURR BAND NTOB,TOTAL REBATE,NTOB SPEND TO NEXT BAND,END OF PERIOD DATE,NEXT BAND NTOB PCT,EXTRA REBATE,NEXT BAND NTOB (Value),LAST TRADE DATE,MAXIMUM BAND SIZE,CURR BAND NTOB DEC,LP-TOTAL SPEND,LP-TOB TOTAL SPEND,LP-NONTOB TOTAL SPEND,LP-CURR BAND NTOB,LP-TOTAL REBATE,TESCO-TOTAL-REBATE,TESCO-LP-TOTAL-REBATE,TESCO-CURR-BAND,TESCO-LP-BAND,TESCO-CURR-SPEND,TESCO-LP-TOTAL-SPEND,TESCO-CURR-QUALIFYING-SPEND,TESCO-LP-QUALIFYING-SPEND,TESCO-PERIOD-NO,TESCO-END-OF-PERIOD-DATE,TESCO-END-OF-DATA-CHAR',
+			webcustpref: 'INTPREF-ZCUSTOMER,INTPREF-CDATE,IN TPREF-CTIME,INTPREF-ZBOOK_POST,INTPREF-ZTP_POST,INTPREF-ZBOOK_PHONE,INTPREF-ZTP_PHONE,INTPREF-ZBOOK_EMAILID1,INTPREF-ZBOOK_EMAIL1,INTPREF-ZTP_EMAIL1,INTPREF-ZCHANGE_DATE_EMAIL1,INTPREF-ZBOOK_EMAILID2,INTPREF-ZBOOK_EMAIL2,INTPREF-ZTP_EMAIL2,INTPREF-ZCHANGE_DATE_EMAIL2,INTPREF-ZBOOK_WMAIL,INTPREF-ZTP_WMAIL,INTPREF-ZCHANGE_DATE_WMAIL,INTPREF-ZBOOK_SMSNO1,INTPREF-ZBOOK_SMS1,INTPREF-ZTP_SMS1,INTPREF-ZBOOK_SMSNO2,INTPREF-ZCUST_GUID,INTPREF-ZECONOPID,INTPREF-ZRTFACILITYID,INTPREF-ZTOBSALES',
+			sapcustpref: 'INTPREF-ZCUSTOMER,INTPREF-CDATE,IN TPREF-CTIME,INTPREF-ZBOOK_POST,INTPREF-ZTP_POST,INTPREF-ZBOOK_PHONE,INTPREF-ZTP_PHONE,INTPREF-ZBOOK_EMAILID1,INTPREF-ZBOOK_EMAIL1,INTPREF-ZTP_EMAIL1,INTPREF-ZCHANGE_DATE_EMAIL1,INTPREF-ZBOOK_EMAILID2,INTPREF-ZBOOK_EMAIL2,INTPREF-ZTP_EMAIL2,INTPREF-ZCHANGE_DATE_EMAIL2,INTPREF-ZBOOK_WMAIL,INTPREF-ZTP_WMAIL,INTPREF-ZCHANGE_DATE_WMAIL,INTPREF-ZBOOK_SMSNO1,INTPREF-ZBOOK_SMS1,INTPREF-ZTP_SMS1,INTPREF-ZBOOK_SMSNO2,INTPREF-ZCUST_GUID,INTPREF-ZECONOPID,INTPREF-ZRTFACILITYID,INTPREF-ZTOBSALES',
+			claims: 'CLAIM-HD-RECTYPE,CLAIM-HD-REFERENCE,CLAIM-HD-CUSTNO,CLAIM-HD-INVOICE-NO,CLAIM-HD-CREATION-DATE,CLAIM-HD-CREATION-TIME,CLAIM-HD-USER-E-MAIL,CLAIM-HD-STATUS,CLAM-HD-WHO-RAISED-CLAIM-IND,CLAIM-HD-WEB-VALIDATED-FLAG,CLAIM-DL-RECTYPE,CLAIM-DL-LINE-NO,CLAIM-DL-SUCODE,CLAIM-DL-CASE-QTY,CLAIM-DL-UNIT-QTY,CLAIM-DL-REASON-CODE,CLAIM-DL-SUB-REASON-CODE,CLAIM-DL-ADD_INFO,CLAIM-DL-COLLECT-REQ-FLAG,CLAIM-DL-PHOTO-URL,CLAIM-DL-STATUS',
+			claimstatus: 'CLSTAT-HD-REFERENCE,CLSTAT-HD-STATUS,CLSAT-CL-LINE-NO,CLSAT-CL-SUCODE,CLSAT-CL-VALUE,CLSTAT-CL-STATUS-CODE,CLSTAT-CL-STATUS-REASON-CODE,CLSTAT-CL-STATUS-SUB-REASON-CODE,CLSTAT-CL-ADD-INFO,CLSTAT-CL-DC-COMMENTS,CLSTAT-APP-DATE,CLSTAT-APP-TIME,CLSTAT-CHG-DATE,CLSTAT-CHG-TIME,CLAIM-DL-CASE-QTY,CLAIM-DL-UNIT-QTY',
+			enhancedhistory: 'INTEPURCH-HD-INVOICE-DATE,INTEPURCH-HD-INVOICE-NO,INTEPURCH-HD-STORE-ID,INTEPURCH-HD-CUSTNO,INTEPURCH-HD-CUST-CAT-CD,INTEPURCH-HD-TILL-TIME,INTEPURCH-HD-DEL-IND,INTEPURCH-HD-SOP-FLAG,INTEPURCH-HD-ORDER-METHOD,INTEPURCH-HD-PICK-METHOD,INTEPURCH-HD-AUTO-INV,INTEPURCH-HD-PO-ORDER-NO,INTEPURCH-HD-HOW-BOOKED-IN,INTEPURCH-HD-ORDER-STOCK-TYPE,INTEPURCH-DL-SUCODE,INTEPURCH-DL-INV-LINE-TYPE,INTEPURCH-DL-QUANTITY,INTEPURCH-DL-LOCAL-SELL-VALUE,INTEPURCH-TOTAL-UNITS,INTEPURCH-ONLINE-EXC-IND,INTEPURCH-TOTAL-UNITS',
+			hfss: 'BARCODE,BRAND,DESCRIPTION,HFSS-INDICATOR,SIGN,NUTRIENT-PROFILE-SCORE,FOOD-CATEGORY,HFSS-FOOD-OR-DRINK'
+
 		}
 
 		const pattern = {
-			standard: {
-				regex: 
-				/^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
-				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48'
-			},
-			fascia: {
-				regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
-				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27'
-			},
-			club: {
-				regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
-				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21'
-			}
+			pricingstandard: {
+					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+					length: 48
+				},
+				pricingfascia: {
+					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+					length: 27
+				},
+				pricingclub: {
+					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+					length: 21
+				}, 
+				product: {
+					regex: /^(.{3})(.{2})(.{6})(.{6})(.{3})(?<decimal1_2>.{8})(?<decimal2_3>.{6})(.{1})(.{6})(?<decimal3_2>.{8})(?<decimal4_2>.{8})(?<decimal5_2>.{4})(.{1})(.{1})(.{1})(.{8})(.{8})(.{2})(.{1})$/d,
+					length: 19
+				},
+				productGroup: {
+					regex: /^(.{6})(.{3})(.{30})(.{6})(.{12})(.{1})(.{6})(.{6})(.{60})(.{1})(.{1})(.{7})(.{35})(.{1})(.{1})(.{1})(.{2})(.{1})(.{6})(.{1})(.{8})(.{9})(.{1})(.{8})(.{3})(.{6})(.{1})$/,
+					length: 27
+				},
+				tnaReason: {
+					regex: /^(.{3})(.{6})(.{1})(.{6})(.{8})$/,
+					length: 5
+				}
 		}
 	
-	const searchUrl = 'https://www.bookertest.co.uk/products/search?keywords=';
 	
-	
-	const licensedProducts = [
-			287939,
-			257137,
-			201393,
-			208349
-			
-		];
-
-
-		
-		const unlicensedProducts = [
-			175137,
-			287939,
-			257137,
-			134907,
-			201684,
-			205012,
-			287019,
-			233096
-		];
-		
-		const licensedOeProducts = [
-			888844,
-			888853
-		];
-		
-		const unlicensedOeProducts = [
-			888843,
-			888844,
-			888853,
-			888854
-		];
-		
-	function oeUnlicensed() {
-		unlicensedOeProducts.forEach(product => 
-			window.open(searchUrl + product)
-		);
+	const decimalValue = (decimal, value) => {
+		return parseFloat(value).toFixed(decimal);
 	}
 
-	function oeLicensed() {
-		licensedOeProducts.forEach(product => 
-			window.open(searchUrl + product)
-		);
-	}
-		
-
-	function unlicensed() {
-		unlicensedProducts.forEach(product => 
-			window.open(searchUrl + product)
-		);
+	function captureGroupString(length) {
+		if (length == 0) {
+			return '';
+		} else {
+			let groups = captureGroupString(length - 1);
+			groups += '$'+length+',';
+			return groups;
+		}
 
 	}
-	
-	function licensed() {
-		licensedProducts.forEach(product =>
-			window.open(searchUrl + product)
-		);
-	}	
-	
+
 	
 	function readFile(input) {			
 
@@ -933,16 +941,68 @@
 			let splitLines = reader.result.split(/\r\n|\n/);
 
 
-			let fileType = (file.name.includes('STDPRICE')) ? 'standard' 
-			: (file.name.includes('CLBPRICE')) ? 'club'
-			: (file.name.includes('FASPRICE')) ? 'fascia'
+			let fileType = (file.name.includes('stdprice')) ? 'pricingstandard' 
+			: (file.name.includes('clbprice')) ? 'pricingclub'
+			: (file.name.includes('fasprice')) ? 'pricingfascia'
+			: (file.name.includes('product')) ? 'product'
+			: (file.name.includes('productgroup')) ? 'productgroup'
+			: (file.name.includes('tnareasons')) ? 'tnareasons'
+			: (file.name.includes('barcode')) ? 'barcode'
+			: (file.name.includes('pricelist')) ? 'pricelist'
+			: (file.name.includes('category')) ? 'category'
+			: (file.name.includes('barrcat')) ? 'barrcat'
+			: (file.name.includes('longtailproduct')) ? 'longtailproduct'
+			: (file.name.includes('promo')) ? 'promo'
+			: (file.name.includes('promoset')) ? 'promoset'
+			: (file.name.includes('promotostore')) ? 'promotostore'
+			: (file.name.includes('productinpromoset')) ? 'productinpromoset'
+			: (file.name.includes('customer')) ? 'customer'
+			: (file.name.includes('ORDERS')) ? 'orders'
+			: (file.name.includes('confirm')) ? 'confirm'
+			: (file.name.includes('depot')) ? 'depot'
+			: (file.name.includes('ohrs')) ? 'ohrs'
+			: (file.name.includes('supplier')) ? 'supplier'
+			: (file.name.includes('longtailsupplier')) ? 'longtailsupplier'
+			: (file.name.includes('dropshipsuppcust')) ? 'dropshipsuppcust'
+			: (file.name.includes('natacc')) ? 'natacc'
+			: (file.name.includes('brpschedule')) ? 'brpschedule'
+			: (file.name.includes('brpstatements')) ? 'brpstatements'
+			: (file.name.includes('dropshipsummary')) ? 'dropshipsummary'
+			: (file.name.includes('history')) ? 'history'
+			: (file.name.includes('bestsellers')) ? 'bestsellers'
+			: (file.name.includes('vatsummary')) ? 'vatsummary'
+			: (file.name.includes('SAP_vatsummary')) ? 'sapvatsummary'
+			: (file.name.includes('longtailsummary')) ? 'longtailsummary'
+			: (file.name.includes('spendandsave')) ? 'spendandsave'
+			: (file.name.includes('WEB_custpref')) ? 'webcustpref'
+			: (file.name.includes('SAP_custpref')) ? 'sapcustpref'
+			: (file.name.includes('claims')) ? 'claims'
+			: (file.name.includes('claimstatus')) ? 'claimstatus'
+			: (file.name.includes('enhancedhistory')) ? 'enhancedhistory'
+			: (file.name.includes('custcredit')) ? 'custcredit'
+			: (file.name.includes('minunitprices')) ? 'minunitprices'
+			: (file.name.includes('prodref')) ? 'prodref'
 			: 'none';
 
 			csvData.push(heading[fileType] + '\n');
 
+			let interfaceLength = pattern[fileType].length;
+			let regex = pattern[fileType].regex;
+			
+			let groups = captureGroupString(interfaceLength).slice(0, -1);
+			splitLines.map(line => {
+				/* add extra checks here to see if the column should have 2 or 3 decimal places. Cannot just use parseInt and then toFixed() for these values to sort out the decimal places because they could have preceding zeros  */
+				
+				let matches = regex.exec(line);
+				/*let convertToDecimals = Object.entries(matches.groups).map(value => {
+					let decimalPlace = value[0].split('_')[1];
+					return value[1].slice(0, -decimalPlace) + '.' + value[1].slice(-decimalPlace);  
+				});*/
 
-			splitLines.forEach(line => {
-				csvData.push(line.replace(pattern[fileType].regex, pattern[fileType].group + '\n'));
+
+				let currentLine = line.replace(regex, groups);
+				
+				csvData.push(currentLine + '\n');
 			});
 
 			let newFile = new File(csvData, { 
@@ -987,7 +1047,7 @@
 	</head>
 	<body>
 	<header>
-		<div class="container">
+		<div class="container pt-3 pb-3">
 			<img src="https://www.booker.co.uk/images/booker.png" class="mt-3">
 		</div>
 	</header>
@@ -995,11 +1055,12 @@
 	<div class="jumbotron jumbotron-fluid mt-5 booker-jumbotron pt-3 pb-3">
       <div class="container">
         <h1>Tools</h1>
-        <p>Some web based custom tools to try and help with the pricing project testing.</p>
+        <p>Some web based custom tools to try and help.</p>
       </div>
   </div>
-	<div class="container pt-3 pb-3">
 	
+	<!-- this is a bit crap so sacking this off
+	<div class="container pt-3 pb-3">
 		<h3>Opening all products in one hit</h3>
 		<p>Ensure allowing pop ups in your browser is enabled</p>
 		<div class="mb-3">
@@ -1008,25 +1069,22 @@
 			<button class="btn btn-primary" onclick="oeLicensed()">OE Licensed</button>
 			<button class="btn btn-primary" onclick="oeUnlicensed()">OE Unlicensed</button>
 		</div>
-	</div>
-	<div class="container pt-3 pb-3">
-		<hr />
-	</div>
+	</div> 
+-->
 	<div class="container pt-3 pb-3">
 		
 		<h3>File converter</h3>
-		<p>Converts (so far) standard, fascia and club pricing files downloaded from Github into readable csv format</p>
+		<p>The aim is to be able to convert all interfaces into readable csv format and JSON. Converts (so far) standard, fascia and club pricing files downloaded from Github, and product, product group and tnareason files from Getronics. Need to get the actual files from Getronics for all other interfaces to check each one works.</p>
 		<div class="mb-3">
-			<label for="label" class="form-label">Price File:</label>
+			<label for="label" class="form-label">File:</label>
 			<input type="file" class="form-control" name="fileConvert" id="fileConvert" onchange="readFile(this)"/>
 		</div>
 		<div class="mb-3" id="downloadFile">
 		
 		</div>
 	</div>
-	<div class="container pt-3 pb-3">
-		<hr>
-	</div>
+		<hr />
+
 		<div class="container pt-3 pb-3">
 			<h3>Customer File creator</h3>
 			<p>An attempt to make this quicker / easier?
@@ -1038,7 +1096,7 @@
 					<li>Only required fields are showing, non-required fields are created with spaces in the background, or with default values (such as addresses)</li>
 					<li>"Try" to create an option to create a combination of accounts with one hit of a button. The combination is based on Branch ID, Group Sector (which controls whether it is a Retailer/Caterer), Licenced</li>
 					<li>An option to add the values selected as a new line</li>
-					<li>An option to add the values selected and generate a useful combination of lines, based on business type, group sectors and tobacco club</li>
+					<li>An option to add the values selected and generate a useful combination of lines, based on business type, group sectors and tobacco club (but let's get one line to work first)</li>
 				</ul>
 			</p>
 			<div id="createCustomerFile"></div>
@@ -1055,11 +1113,16 @@
 	<script type="text/babel">
 		const { useState } = React;
 		
+
+		function App() {
+			const [line, setLine] = useState({});
+
+
 		function Field({props}) {
 			if (props.type == 'select') {
 				return (
 				<div className="form-floating">
-					<select className="form-select" placeholder={props.placeholder} name={props.name} required>
+					<select className="form-select" id={props.name} placeholder={props.placeholder} name={props.name} onChange={e => {setLine(e.target.value)}}>
 						<option value="">Please select</option>
 							{
 								Object.entries(props.values).map(([k, v]) => {
@@ -1077,14 +1140,14 @@
 			if (props.type == 'input') {
 				return (
 					<div className="form-floating mb-3">
-						<input type="text" className="form-control" placeholder={props.placeholder} name={props.name} maxLength={props.length} value={props.default} />
+						<input type="text" className="form-control" placeholder={props.placeholder} name={props.name} maxLength={props.length}  value={props.default} />
 						<label forhtml="floatingInput">{props.placeholder}</label>
 					</div>
 				)
 			}
 			if (props.type == 'radio') {
 				return (
-					<div>
+					<div onChange={e => {setLine(e.target.value)}}>
 						<label>{props.placeholder}</label>
 						<div className="form-check">
 							<input type="radio" className="form-check-input" name={props.name} />
@@ -1092,7 +1155,7 @@
 						</div>
 
 						<div className="form-check">
-							<input type="radio" className="form-check-input" name={props.name} checked="false" />
+							<input type="radio" className="form-check-input" name={props.name} />
 							<label className="form-check-label" forhtml="noRadio">No</label>
 						</div>
 					</div>
@@ -1115,47 +1178,36 @@
 			)	
 		}
 
+		function createFile() {
 
-		
+		}
 
 		function AddLineButton() {
-			const [count, setCount] = useState(0);
-			function handleClick() {
-    		setCount(count + 1);
- 	 		}
-
 			return (
 				<div className="d-grid gap-2 mb-3">
-					<button onClick={handleClick} type="button" className="btn btn-outline-secondary">Add Line Click{count}</button>
+					<button type="submit" onClick={addLine} className="btn btn-outline-secondary">Add Line {setLine} </button>
 				</div>	
 			)
 		}
 
-		function AddComboButton() {
-			return (
-				<div className="d-grid gap-2 mb-3">
-					<button type="button" className="btn btn-outline-secondary">Add Combination</button>
-				</div>
-			)
-		}
+
 
 		function CreateFileButton() {
 			return (
 				<div className="d-grid gap-2 mb-3">
-					<button type="button" className="btn booker">Create File</button>
+					<button type="submit" className="btn booker" onClick={createFile}>Create File</button>
 				</div>	
 			)
 		}
 
-
-
-		function App() {
-			const [state, setState] = useState()
+			function addLine() {
+				console.log(line);
+			}
+			
 			return (
 				<div>
-					<Fields />	
+					<Fields />
 					<AddLineButton />
-					<AddComboButton />
 					<CreateFileButton />
 				</div>
 			)
