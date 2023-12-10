@@ -894,7 +894,7 @@
 					length: 21
 				}, 
 				product: {
-					regex: /^(.{3})(.{2})(.{6})(.{6})(.{3})(?<decimal1_2>.{8})(?<decimal2_3>.{6})(.{1})(.{6})(?<decimal3_2>.{8})(?<decimal4_2>.{8})(?<decimal5_2>.{4})(.{1})(.{1})(.{1})(.{8})(.{8})(.{2})(.{1})$/d,
+					regex: /^(.{3})(.{2})(.{6})(.{6})(.{3})(?<decimal1_2>[^.]{8})(?<decimal2_3>[^.]{6})(.{1})(.{6})(?<decimal3_2>[^.]{8})(?<decimal4_2>[^.]{8})(?<decimal5_2>[^.]{4})(.{1})(.{1})(.{1})(.{8})(.{8})(.{2})(.{1})$/d,
 					length: 19
 				},
 				productGroup: {
@@ -939,7 +939,6 @@
 		reader.onload = function() {
 
 			let splitLines = reader.result.split(/\r\n|\n/);
-
 
 			let fileType = (file.name.includes('stdprice')) ? 'pricingstandard' 
 			: (file.name.includes('clbprice')) ? 'pricingclub'
@@ -991,9 +990,29 @@
 			
 			let groups = captureGroupString(interfaceLength).slice(0, -1);
 			splitLines.map(line => {
-				/* add extra checks here to see if the column should have 2 or 3 decimal places. Cannot just use parseInt and then toFixed() for these values to sort out the decimal places because they could have preceding zeros  */
-				
-				let matches = regex.exec(line);
+				let matches = regex.exec(line);		
+				let groupsKeys = Object.keys(matches.indices.groups) ? Object.keys(matches.indices.groups) : '';
+
+				/*matches.forEach(m => {
+					console.log(m);
+				});*/
+
+				matches.indices.forEach(match => {
+					Object.entries(matches.indices.groups).map(named => {
+						for (let i = 0; i < matches.indices.length; i++) {
+							if (JSON.stringify(named[1]) === JSON.stringify(matches.indices[i])) {
+								let decimalPlace = named[0].split('_')[1];
+								let indexOfNamedMatch = i;
+								console.log(matches[indexOfNamedMatch]);
+							}
+						}
+						//decimalPlace += named[0].split('_')[1];
+						
+					});
+					
+				});
+
+
 				/*let convertToDecimals = Object.entries(matches.groups).map(value => {
 					let decimalPlace = value[0].split('_')[1];
 					return value[1].slice(0, -decimalPlace) + '.' + value[1].slice(-decimalPlace);  
@@ -1004,6 +1023,7 @@
 				
 				csvData.push(currentLine + '\n');
 			});
+		
 
 			let newFile = new File(csvData, { 
 				type: 'text/csv;charset=utf-8,' 
