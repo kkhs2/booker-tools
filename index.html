@@ -988,39 +988,32 @@
 			let interfaceLength = pattern[fileType].length;
 			let regex = pattern[fileType].regex;
 			
-			let groups = captureGroupString(interfaceLength).slice(0, -1);
+			let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
 			splitLines.map(line => {
 				let matches = regex.exec(line);		
-				let groupsKeys = Object.keys(matches.indices.groups) ? Object.keys(matches.indices.groups) : '';
-
-				/*matches.forEach(m => {
-					console.log(m);
-				});*/
-
-				matches.indices.forEach(match => {
-					Object.entries(matches.indices.groups).map(named => {
-						for (let i = 0; i < matches.indices.length; i++) {
-							if (JSON.stringify(named[1]) === JSON.stringify(matches.indices[i])) {
-								let decimalPlace = named[0].split('_')[1];
-								let indexOfNamedMatch = i;
-								console.log(matches[indexOfNamedMatch]);
-							}
-						}
-						//decimalPlace += named[0].split('_')[1];
-						
-					});
-					
+				let convertedValues = [];
+				let indices = matches.indices;
+				let groupIndices = Object.values(matches.indices.groups);
+				let groups = matches.groups;
+				Object.entries(groups).map(val => {
+					let decimal = val[0].split('_')[1];
+					convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
 				});
 
+				console.log(indices);
 
-				/*let convertToDecimals = Object.entries(matches.groups).map(value => {
-					let decimalPlace = value[0].split('_')[1];
-					return value[1].slice(0, -decimalPlace) + '.' + value[1].slice(-decimalPlace);  
+				
+				/*Object.entries(groupIndices).map(named => {
+					let values = [];
+					values['decimalPlace'] = named[0].split('_')[1];
+					values['index'] = named[1];
+					convertedValues.push(values);
+					//let convertValue = parseFloat(matches[i].slice(0, -decimalPlace) + '.' + matches[i].slice(-decimalPlace));
 				});*/
 
 
-				let currentLine = line.replace(regex, groups);
-				
+				let currentLine = line.replace(regex, captureGroups);
+
 				csvData.push(currentLine + '\n');
 			});
 		
