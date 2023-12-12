@@ -897,11 +897,11 @@
 					regex: /^(.{3})(.{2})(.{6})(.{6})(.{3})(?<decimal1_2>[^.]{8})(?<decimal2_3>[^.]{6})(.{1})(.{6})(?<decimal3_2>[^.]{8})(?<decimal4_2>[^.]{8})(?<decimal5_2>[^.]{4})(.{1})(.{1})(.{1})(.{8})(.{8})(.{2})(.{1})$/d,
 					length: 19
 				},
-				productGroup: {
+				productgroup: {
 					regex: /^(.{6})(.{3})(.{30})(.{6})(.{12})(.{1})(.{6})(.{6})(.{60})(.{1})(.{1})(.{7})(.{35})(.{1})(.{1})(.{1})(.{2})(.{1})(.{6})(.{1})(.{8})(.{9})(.{1})(.{8})(.{3})(.{6})(.{1})$/,
 					length: 27
 				},
-				tnaReason: {
+				tnareasons: {
 					regex: /^(.{3})(.{6})(.{1})(.{6})(.{8})$/,
 					length: 5
 				}
@@ -986,6 +986,7 @@
 			csvData.push(heading[fileType] + '\n');
 
 			let interfaceLength = pattern[fileType].length;
+		
 			let regex = pattern[fileType].regex;
 			
 			let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
@@ -1012,18 +1013,14 @@
 					})
 				}
 				let currentLine = line.replace(regex, captureGroups);
-				let processLine = currentLine.split(',');
-				processLine = convertedValues.map(c => {
-					convertedValuesIndexes.map(i => {
-						processLine[i] = convertedValues[c]
-					})
-				})
-
-				console.log(processLine);
+				let finalLine = currentLine.split(',');
+	      for (let j = 0; j < convertedValuesIndexes.length; j++) {
+          let index = convertedValuesIndexes[j] - 1;
+					finalLine[index] = convertedValues[j];
+        }
 				csvData.push(finalLine + '\n');
 			});
 		
-
 			let newFile = new File(csvData, { 
 				type: 'text/csv;charset=utf-8,' 
 			});
