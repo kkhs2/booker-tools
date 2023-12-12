@@ -992,29 +992,35 @@
 			splitLines.map(line => {
 				let matches = regex.exec(line);		
 				let convertedValues = [];
+				let convertedValuesIndexes = [];
 				let indices = matches.indices;
+
 				let groupIndices = Object.values(matches.indices.groups);
 				let groups = matches.groups;
 				Object.entries(groups).map(val => {
 					let decimal = val[0].split('_')[1];
 					convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
 				});
-
-				console.log(indices);
-
-				
-				/*Object.entries(groupIndices).map(named => {
-					let values = [];
-					values['decimalPlace'] = named[0].split('_')[1];
-					values['index'] = named[1];
-					convertedValues.push(values);
-					//let convertValue = parseFloat(matches[i].slice(0, -decimalPlace) + '.' + matches[i].slice(-decimalPlace));
-				});*/
-
-
+					
+				if (matches.indices.groups) {
+					Object.values(matches.indices.groups).map(group => {
+						matches.indices.map((match, k) => {
+							if (JSON.stringify(group) == JSON.stringify(match)) {
+								convertedValuesIndexes.push(k);
+							}
+						});
+					})
+				}
 				let currentLine = line.replace(regex, captureGroups);
+				let processLine = currentLine.split(',');
+				processLine = convertedValues.map(c => {
+					convertedValuesIndexes.map(i => {
+						processLine[i] = convertedValues[c]
+					})
+				})
 
-				csvData.push(currentLine + '\n');
+				console.log(processLine);
+				csvData.push(finalLine + '\n');
 			});
 		
 
