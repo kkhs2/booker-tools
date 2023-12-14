@@ -842,7 +842,7 @@
 			pricingclub: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Club eg H13333,WSP Collect Price,WSP Delivered Price,WSP OE Price,WSP Click & Collect Price,WSP Spare4,Recommended Retail Price,POR,Delivered POR,OE POR,Click & Collect POR,Spare POR,Start Date, End Date',
 			product: 'PRODTRAN-STORE-ID,PRODTRAN-HUB,PRODTRAN-SUCODE,PRODTRAN-ARTICLE-CODE,PRODTRAN-MIDAS-SPLIT-NUM,PRODTRAN-PRICE,PRODTRAN-ITM-IN-SELL-UNT,PRODTRAN-PROMO,PRODTRAN-UNITID,PRODTRAN-RRP,PRODTRAN-PREV-PRC,PRODTRAN-POR,PRODTRAN-ISNEW,PRODTRAN-ISDEL,PRODTRAN-LEAD-TIME-STATUS,PRODTRAN-PRICE-START,PRODTRAN-PRICE-END,PRODTRAN-STORE-ORDER-GROUP,PRODTRAN-LONDIS-ORDER-GROUP',
 			productgroup: 'INTPRODG-ARTICLE-CODE,INTPRODG-MIDAS-SPLIT-NUM,INTPRODG-NAME,INTPRODG-CATEGORYID,INTPRODG-PACK-SIZE,INTPRODG-ISDEL,INTPRODG-WEB-PARENT-ARTICLE-CODE,INTPRODG-SUCODE,INTPRODG-LONG-NAME,INTPRODG-WEIGHT-TYPE,INTPRODG-VAT-RATE,INTPRODG-SUPPLIER,INTPRODG-PACKDESC,INTPRODG-IMAGEPAID,INTPRODG-OWNBRAND,INTPRODG-STORAGE-TYPE,INTPRODG-ARTICLE-STATUS,INTPRODG-DELIST-REASON,INTPRODG-PARENT-ARTICLE-CODE,INTPRODG-WEB FLAG,INTPRODG-LONDIS-PROD-CD,INTPRODG-BUDGENS-PROD-CD,INTPRODG-PRICE-MARK-FLAG,INTPRODG-ITM-IN-SELL-UNT,INTPRODG-SHELF-LIFE,INTPRODG-MASTER-MIDAS-CODE,INTPRODG-HFSS-HIGH',
-			tnareason: 'INTTNA-STORE-ID,INTTNA-MASTER_MCODE,INTTNA-REASON_CODE,INTTNA-REPLACEMENT_MASTER_MCODE,INTTNA-AVAILABLE_DATE',
+			tnareasons: 'INTTNA-STORE-ID,INTTNA-MASTER_MCODE,INTTNA-REASON_CODE,INTTNA-REPLACEMENT_MASTER_MCODE,INTTNA-AVAILABLE_DATE',
 			longtailproduct: 'SUPPLIER-SUPPNO,MARKETPLACE-PRODUCT-CODE,SUPPLIER-OWN-ITEM-CODE,PRODUCT-DESC,BRAND-NAME,WEIGHTED,PACK-SIZE,STORAGE-TYPE,VAT-RATE%,HANDLING-TIME-DAYS,LAUNCH-DATE,BARCODE,TO-BE-SOLD-ON-WEBSITE,ITEM-IN-SELL-UNIT,WSP,RRP,WEIGHT,PRICE-PER-KG,POR,DATE-PRODUCT-LOADED,STATUS,INCOMPLETE-DATE,IN-REVIEW-DATE,SCHEDULED-DATE,LIVE-DATE,BOOKER-DELISTED-DATE,SUSPENDED-DATE,REJECTED-DATE,SUPPLIER-DELETE-DATE,WEB-SHELF-CODE,WEB-SHELF-DESC,WEB-AISLE-CODE,WEB-AISLE-DESC,WEB-DEPARTMENT-CODE,WEB-DEPARTMENT-DESC',
 			barcode: 'INTBARCD-BARCD,BARCODE-TYPE,CONSUMER-BARCODE-FLAG,PRIMARY-BARCODE-FLAG,INTBARCD-SPACES,INTBARCD-ARTICLE-CODE,INTPRODG- ISDEL',
 			pricelist: 'PRCLIST-NACNO,PRCLIST-SUCODE,PRCLIST-ARTICLE-CODE,PRCLIST-PRICE,PRCLIST-ITM-IN-SELL-UNT,PRCLIST-UNITID,PRCLIST-CUST-OWN-CODE,PRCLIST-ISDEL,PRCLIST-RSP',
@@ -898,11 +898,11 @@
 					length: 19
 				},
 				productgroup: {
-					regex: /^(.{6})(.{3})(.{30})(.{6})(.{12})(.{1})(.{6})(.{6})(.{60})(.{1})(.{1})(.{7})(.{35})(.{1})(.{1})(.{1})(.{2})(.{1})(.{6})(.{1})(.{8})(.{9})(.{1})(.{8})(.{3})(.{6})(.{1})$/,
+					regex: /^(.{6})(.{3})(.{30})(.{6})(.{12})(.{1})(.{6})(.{6})(.{60})(.{1})(.{1})(.{7})(.{35})(.{1})(.{1})(.{1})(.{2})(.{1})(.{6})(.{1})(.{8})(.{9})(.{1})(?<decimal1_3>[^.]{8})(.{3})(.{6})(.{1})$/d,
 					length: 27
 				},
 				tnareasons: {
-					regex: /^(.{3})(.{6})(.{1})(.{6})(.{8})$/,
+					regex: /^(.{3})(.{6})(.{1})(.{6})(.{8})$/d,
 					length: 5
 				}
 		}
@@ -923,6 +923,34 @@
 
 	}
 
+	function processNamedGroups(matches) {
+		console.log(matches);
+		let convertedValues = [];
+		let convertedValuesIndexes = [];
+		let groupIndices = Object.values(matches.indices.groups);
+		let groups = matches.groups;
+		Object.entries(groups).map(val => {
+			let decimal = val[0].split('_')[1];
+			convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+		});
+					
+		//if (matches.indices.groups) {
+			Object.values(matches.indices.groups).map(group => {
+				matches.indices.map((match, k) => {
+					if (JSON.stringify(group) == JSON.stringify(match)) {
+						convertedValuesIndexes.push(k);
+					}
+				});
+			})
+		//}
+			let finalLine = currentLine.split(',');
+	    for (let j = 0; j < convertedValuesIndexes.length; j++) {
+        let index = convertedValuesIndexes[j] - 1;
+				finalLine[index] = convertedValues[j];
+      }
+			return finalLine;
+	}
+
 	
 	function readFile(input) {			
 
@@ -940,11 +968,12 @@
 
 			let splitLines = reader.result.split(/\r\n|\n/);
 
+			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match. Need to actually match the file name properly. */
 			let fileType = (file.name.includes('stdprice')) ? 'pricingstandard' 
 			: (file.name.includes('clbprice')) ? 'pricingclub'
 			: (file.name.includes('fasprice')) ? 'pricingfascia'
-			: (file.name.includes('product')) ? 'product'
 			: (file.name.includes('productgroup')) ? 'productgroup'
+			: (file.name.includes('product')) ? 'product'
 			: (file.name.includes('tnareasons')) ? 'tnareasons'
 			: (file.name.includes('barcode')) ? 'barcode'
 			: (file.name.includes('pricelist')) ? 'pricelist'
@@ -990,12 +1019,24 @@
 			let regex = pattern[fileType].regex;
 			
 			let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
-			splitLines.map(line => {
-				let matches = regex.exec(line);		
-				let convertedValues = [];
-				let convertedValuesIndexes = [];
-				let indices = matches.indices;
 
+			splitLines.map(line => {
+				let matches = regex.exec(line);
+				let convertedLine = '';
+				let hasNamedGroups = (matches.groups) ? matches.groups : false;
+
+				/* need to try and find a better way to do this because working out whether the matches return named groups should be done outside the map. Perhaps use the first line of the file first before going through with the rest. At the moment it is doing it but is expensive on processing. */
+
+				/* need a function here to check whether the matches return named groups. TO DO - regexReturnsNamedGroups()  */
+				
+				if (hasNamedGroups) {
+					convertedLine = processNamedGroups(matches);
+				}
+
+				console.log(convertedLine);
+
+				/*let convertedValues = [];
+				let convertedValuesIndexes = [];
 				let groupIndices = Object.values(matches.indices.groups);
 				let groups = matches.groups;
 				Object.entries(groups).map(val => {
@@ -1011,14 +1052,14 @@
 							}
 						});
 					})
-				}
+				}*/
 				let currentLine = line.replace(regex, captureGroups);
-				let finalLine = currentLine.split(',');
+				/*let finalLine = currentLine.split(',');
 	      for (let j = 0; j < convertedValuesIndexes.length; j++) {
           let index = convertedValuesIndexes[j] - 1;
 					finalLine[index] = convertedValues[j];
-        }
-				csvData.push(finalLine + '\n');
+        }*/
+				csvData.push(currentLine + '\n');
 			});
 		
 			let newFile = new File(csvData, { 
@@ -1034,7 +1075,6 @@
 			csvFileLink.textContent = 'Click to Download'
 
 			document.getElementById('downloadFile').append(csvFileLink);
-			
   		};
 	}
 
