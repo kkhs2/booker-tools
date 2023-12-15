@@ -920,35 +920,35 @@
 			groups += '$'+length+',';
 			return groups;
 		}
-
 	}
 
-	function processNamedGroups(matches) {
-		console.log(matches);
-		let convertedValues = [];
-		let convertedValuesIndexes = [];
-		let groupIndices = Object.values(matches.indices.groups);
-		let groups = matches.groups;
-		Object.entries(groups).map(val => {
-			let decimal = val[0].split('_')[1];
-			convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
-		});
+	function processLine(matches) {
+		let processedLine = '';
+		if (matches.groups) {
+			let groups = matches.groups;
+			let convertedValues = [];
+			let convertedValuesIndexes = [];
+			let groupIndices = Object.values(matches.indices.groups);
+			Object.entries(groups).map(val => {
+				let decimal = val[0].split('_')[1];
+				convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+			});
 					
-		//if (matches.indices.groups) {
 			Object.values(matches.indices.groups).map(group => {
 				matches.indices.map((match, k) => {
 					if (JSON.stringify(group) == JSON.stringify(match)) {
 						convertedValuesIndexes.push(k);
 					}
 				});
-			})
-		//}
+			});
+
 			let finalLine = currentLine.split(',');
 	    for (let j = 0; j < convertedValuesIndexes.length; j++) {
         let index = convertedValuesIndexes[j] - 1;
 				finalLine[index] = convertedValues[j];
       }
-			return finalLine;
+		}
+		return processedLine;
 	}
 
 	
@@ -1022,20 +1022,12 @@
 
 			splitLines.map(line => {
 				let matches = regex.exec(line);
-				let convertedLine = '';
-				let hasNamedGroups = (matches.groups) ? matches.groups : false;
+				//let convertedLine = '';
 
 				/* need to try and find a better way to do this because working out whether the matches return named groups should be done outside the map. Perhaps use the first line of the file first before going through with the rest. At the moment it is doing it but is expensive on processing. */
 
-				/* need a function here to check whether the matches return named groups. TO DO - regexReturnsNamedGroups()  */
-				
-				if (hasNamedGroups) {
-					convertedLine = processNamedGroups(matches);
-				}
-
-				console.log(convertedLine);
-
-				/*let convertedValues = [];
+			// if (matches.groups != undefined) {
+			/*	let convertedValues = [];
 				let convertedValuesIndexes = [];
 				let groupIndices = Object.values(matches.indices.groups);
 				let groups = matches.groups;
@@ -1052,13 +1044,14 @@
 							}
 						});
 					})
-				}*/
+				}
 				let currentLine = line.replace(regex, captureGroups);
 				/*let finalLine = currentLine.split(',');
 	      for (let j = 0; j < convertedValuesIndexes.length; j++) {
           let index = convertedValuesIndexes[j] - 1;
 					finalLine[index] = convertedValues[j];
         }*/
+				let currentLine = line.replace(regex, captureGroups);
 				csvData.push(currentLine + '\n');
 			});
 		
@@ -1066,7 +1059,6 @@
 				type: 'text/csv;charset=utf-8,' 
 			});
 
-	
 			let objUrl = URL.createObjectURL(newFile);
 
 			let csvFileLink = document.createElement('a')
