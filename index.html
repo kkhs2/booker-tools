@@ -923,35 +923,10 @@
 	}
 
 	function processLine(matches) {
-		let processedLine = '';
-		if (matches.groups) {
-			let groups = matches.groups;
-			let convertedValues = [];
-			let convertedValuesIndexes = [];
-			let groupIndices = Object.values(matches.indices.groups);
-			Object.entries(groups).map(val => {
-				let decimal = val[0].split('_')[1];
-				convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
-			});
-					
-			Object.values(matches.indices.groups).map(group => {
-				matches.indices.map((match, k) => {
-					if (JSON.stringify(group) == JSON.stringify(match)) {
-						convertedValuesIndexes.push(k);
-					}
-				});
-			});
-
-			let finalLine = currentLine.split(',');
-	    for (let j = 0; j < convertedValuesIndexes.length; j++) {
-        let index = convertedValuesIndexes[j] - 1;
-				finalLine[index] = convertedValues[j];
-      }
-		}
-		return processedLine;
+		
 	}
 
-	
+	/* TO DO - refactor readFile function as it is very big at the moment. */
 	function readFile(input) {			
 
 		let file = input.files[0];
@@ -968,8 +943,15 @@
 
 			let splitLines = reader.result.split(/\r\n|\n/);
 
-			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match. Need to actually match the file name properly. */
-			let fileType = (file.name.includes('stdprice')) ? 'pricingstandard' 
+			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match and we need to tell exactly which file the user is uploading. Need to actually match the file name properly. The assumption here is that the user gets the file and doesn't rename it, so the format will always be EBIZ_<interface><load of numbers>, extract the interface name from in between */
+			
+			let interface = file.name.match(/(EBIZ_)(?<interface>[a-z]+)(.*)/i);
+
+			let fileType = interface.groups.interface ? interface.groups.interface : '';
+
+			/* commented out below as the above lines is the refactor */
+
+			/*let fileType = (file.name.includes('stdprice')) ? 'pricingstandard' 
 			: (file.name.includes('clbprice')) ? 'pricingclub'
 			: (file.name.includes('fasprice')) ? 'pricingfascia'
 			: (file.name.includes('productgroup')) ? 'productgroup'
@@ -1010,7 +992,7 @@
 			: (file.name.includes('custcredit')) ? 'custcredit'
 			: (file.name.includes('minunitprices')) ? 'minunitprices'
 			: (file.name.includes('prodref')) ? 'prodref'
-			: 'none';
+			: 'none';*/
 
 			csvData.push(heading[fileType] + '\n');
 
@@ -1021,40 +1003,39 @@
 			let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
 
 			splitLines.map(line => {
-				let matches = regex.exec(line);
-				//let convertedLine = '';
+				// check against whitespaces / empty lines in the file
+				if (line.length > 0) {
+					let matches = regex.exec(line);
 
-				/* need to try and find a better way to do this because working out whether the matches return named groups should be done outside the map. Perhaps use the first line of the file first before going through with the rest. At the moment it is doing it but is expensive on processing. */
-
-			// if (matches.groups != undefined) {
-			/*	let convertedValues = [];
-				let convertedValuesIndexes = [];
-				let groupIndices = Object.values(matches.indices.groups);
-				let groups = matches.groups;
-				Object.entries(groups).map(val => {
-					let decimal = val[0].split('_')[1];
-					convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
-				});
+					let currentLine = line.replace(regex, captureGroups);
+			 		if (matches.groups !== undefined) {
+						let convertedValues = [];
+						let convertedValuesIndexes = [];
+						let groupIndices = Object.values(matches.indices.groups);
+						let groups = matches.groups;
+						Object.entries(groups).map(val => {
+							let decimal = val[0].split('_')[1];
+							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+						});
 					
-				if (matches.indices.groups) {
-					Object.values(matches.indices.groups).map(group => {
+						Object.values(matches.indices.groups).map(group => {
 						matches.indices.map((match, k) => {
 							if (JSON.stringify(group) == JSON.stringify(match)) {
 								convertedValuesIndexes.push(k);
 							}
 						});
-					})
+					});
+					let finalLine = currentLine.split(',');
+	      	for (let j = 0; j < convertedValuesIndexes.length; j++) {
+          	let index = convertedValuesIndexes[j] - 1;
+						finalLine[index] = convertedValues[j];
+        	}
+					csvData.push(finalLine + '\n');
+					} else {
+						csvData.push(currentLine + '\n');
+					}
 				}
-				let currentLine = line.replace(regex, captureGroups);
-				/*let finalLine = currentLine.split(',');
-	      for (let j = 0; j < convertedValuesIndexes.length; j++) {
-          let index = convertedValuesIndexes[j] - 1;
-					finalLine[index] = convertedValues[j];
-        }*/
-				let currentLine = line.replace(regex, captureGroups);
-				csvData.push(currentLine + '\n');
 			});
-		
 			let newFile = new File(csvData, { 
 				type: 'text/csv;charset=utf-8,' 
 			});
@@ -1107,7 +1088,7 @@
       </div>
   </div>
 	
-	<!-- this is a bit crap so sacking this off
+	<!-- this is not really useful so sacking it off
 	<div class="container pt-3 pb-3">
 		<h3>Opening all products in one hit</h3>
 		<p>Ensure allowing pop ups in your browser is enabled</p>
