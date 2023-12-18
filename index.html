@@ -882,15 +882,15 @@
 
 		const pattern = {
 			pricingstandard: {
-					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/d,
 					length: 48
 				},
 				pricingfascia: {
-					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/d,
 					length: 27
 				},
 				pricingclub: {
-					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
+					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/d,
 					length: 21
 				}, 
 				product: {
@@ -904,6 +904,32 @@
 				tnareasons: {
 					regex: /^(.{3})(.{6})(.{1})(.{6})(.{8})$/d,
 					length: 5
+				},
+				orders: {
+					fh: {
+						regex: /^(.{2})(.{8})(.{8})(.{4})$/d,
+						length: 4
+					},
+					oh: {
+						regex: /^(.{2})(.{5})(.{9})(.{1})(.{10})(.{8})(.{4})(.{1})(?<decimal1_2>[^.]{8})(.{8})(.{8})(.{1})(.{12})(.{4})(.{32})(.{1})(.{1})(.{7})(.{2})(.{1})$/d,
+						length: 20
+					},
+					od: {
+						regex: /^(.{2})(.{6})(.{28})(.{4})(.{7})(.{5})(.{255})(?<decimal2_2>[^.]{8})(.{15})(.{7})$/d,
+						length: 10
+					},
+					oc: {
+						regex: /^(.{2})(.{1})(.{254})$/d,
+						length: 3
+					},
+					ot: {
+						regex: /^(.{2})(.{5})(.{9})(.{11})(.{5})$/d,
+						length: 5
+					},
+					ft: {
+						regex: /^(.{2})(.{8})(.{8})$/d,
+						length: 3
+					}
 				}
 		}
 	
@@ -913,7 +939,7 @@
 	}
 
 	function captureGroupString(length) {
-		if (length == 0) {
+		if (length == 0 || length == undefined) {
 			return '';
 		} else {
 			let groups = captureGroupString(length - 1);
@@ -922,7 +948,10 @@
 		}
 	}
 
-	function processLine(matches) {
+	/* Order interface is a lot different to the others */
+	function processOrderInterface() {
+		
+				
 		
 	}
 
@@ -941,60 +970,36 @@
 		
 		reader.onload = function() {
 
-			let splitLines = reader.result.split(/\r\n|\n/);
-
-			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match and we need to tell exactly which file the user is uploading. Need to actually match the file name properly. The assumption here is that the user gets the file and doesn't rename it, so the format will always be EBIZ_<interface><load of numbers>, extract the interface name from in between */
+			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match and we need to tell exactly which file the user is uploading. Need to actually match the file name properly. The assumption here is that the user gets the file and doesn't rename it, so the format will always be <EBIZ or CORD>_<interface name><load of numbers.ext>, extract the interface name from in between */
 			
-			let interface = file.name.match(/(EBIZ_)(?<interface>[a-z]+)(.*)/i);
+			let interface = file.name.match(/((EBIZ_|CORD_))(?<interface>[a-z]+)(.*)/i);
 
-			let fileType = interface.groups.interface ? interface.groups.interface : '';
-
-			/* commented out below as the above lines is the refactor */
-
-			/*let fileType = (file.name.includes('stdprice')) ? 'pricingstandard' 
-			: (file.name.includes('clbprice')) ? 'pricingclub'
-			: (file.name.includes('fasprice')) ? 'pricingfascia'
-			: (file.name.includes('productgroup')) ? 'productgroup'
-			: (file.name.includes('product')) ? 'product'
-			: (file.name.includes('tnareasons')) ? 'tnareasons'
-			: (file.name.includes('barcode')) ? 'barcode'
-			: (file.name.includes('pricelist')) ? 'pricelist'
-			: (file.name.includes('category')) ? 'category'
-			: (file.name.includes('barrcat')) ? 'barrcat'
-			: (file.name.includes('longtailproduct')) ? 'longtailproduct'
-			: (file.name.includes('promo')) ? 'promo'
-			: (file.name.includes('promoset')) ? 'promoset'
-			: (file.name.includes('promotostore')) ? 'promotostore'
-			: (file.name.includes('productinpromoset')) ? 'productinpromoset'
-			: (file.name.includes('customer')) ? 'customer'
-			: (file.name.includes('ORDERS')) ? 'orders'
-			: (file.name.includes('confirm')) ? 'confirm'
-			: (file.name.includes('depot')) ? 'depot'
-			: (file.name.includes('ohrs')) ? 'ohrs'
-			: (file.name.includes('supplier')) ? 'supplier'
-			: (file.name.includes('longtailsupplier')) ? 'longtailsupplier'
-			: (file.name.includes('dropshipsuppcust')) ? 'dropshipsuppcust'
-			: (file.name.includes('natacc')) ? 'natacc'
-			: (file.name.includes('brpschedule')) ? 'brpschedule'
-			: (file.name.includes('brpstatements')) ? 'brpstatements'
-			: (file.name.includes('dropshipsummary')) ? 'dropshipsummary'
-			: (file.name.includes('history')) ? 'history'
-			: (file.name.includes('bestsellers')) ? 'bestsellers'
-			: (file.name.includes('vatsummary')) ? 'vatsummary'
-			: (file.name.includes('SAP_vatsummary')) ? 'sapvatsummary'
-			: (file.name.includes('longtailsummary')) ? 'longtailsummary'
-			: (file.name.includes('spendandsave')) ? 'spendandsave'
-			: (file.name.includes('WEB_custpref')) ? 'webcustpref'
-			: (file.name.includes('SAP_custpref')) ? 'sapcustpref'
-			: (file.name.includes('claims')) ? 'claims'
-			: (file.name.includes('claimstatus')) ? 'claimstatus'
-			: (file.name.includes('enhancedhistory')) ? 'enhancedhistory'
-			: (file.name.includes('custcredit')) ? 'custcredit'
-			: (file.name.includes('minunitprices')) ? 'minunitprices'
-			: (file.name.includes('prodref')) ? 'prodref'
-			: 'none';*/
+			let fileType = interface.groups.interface ? interface.groups.interface.toLowerCase() : '';
 
 			csvData.push(heading[fileType] + '\n');
+
+			/* TO DO - refactor and put this into processOrderInterface function, because order interface is completely different */
+			if (fileType == 'orders') {
+				let orderSplitLines = reader.result.split(/\r\n|\n/);
+
+				// we need to find the empty line which separates each order, one way "could" be using orderSplitLines[i].charCodeAt(0) so when the length of the line is 1 and the ASCII value is 13, we know it "should" be a separator;
+				let orders = [];
+				let ordersRegex = pattern[fileType];
+				
+				orderSplitLines.map(o => {
+					let orderLine = o.slice(0, 2).toLowerCase();
+					
+					let interfaceLength = ordersRegex[orderLine].length;
+					let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
+					
+					let matches = ordersRegex[orderLine].regex.exec(o);
+					let line = o.replace(ordersRegex[orderLine].regex, captureGroups);
+				});
+				
+			}
+			
+
+			let splitLines = reader.result.split(/\r\n|\n/);
 
 			let interfaceLength = pattern[fileType].length;
 		
@@ -1006,7 +1011,6 @@
 				// check against whitespaces / empty lines in the file
 				if (line.length > 0) {
 					let matches = regex.exec(line);
-
 					let currentLine = line.replace(regex, captureGroups);
 			 		if (matches.groups !== undefined) {
 						let convertedValues = [];
@@ -1043,12 +1047,12 @@
 			let objUrl = URL.createObjectURL(newFile);
 
 			let csvFileLink = document.createElement('a')
-			csvFileLink.setAttribute('href', objUrl)
-			csvFileLink.setAttribute('download', file.name + 'ConvertedFile.csv')
-			csvFileLink.textContent = 'Click to Download'
+			csvFileLink.setAttribute('href', objUrl);
+			csvFileLink.setAttribute('download', file.name + 'ConvertedFile.csv');
+			csvFileLink.textContent = 'Click to download converted csv file';
 
 			document.getElementById('downloadFile').append(csvFileLink);
-  		};
+  	};
 	}
 
 	</script>
