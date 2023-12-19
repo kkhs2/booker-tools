@@ -915,7 +915,7 @@
 						length: 20
 					},
 					od: {
-						regex: /^(.{2})(.{6})(.{28})(.{4})(.{7})(.{5})(.{255})(?<decimal2_2>[^.]{8})(.{15})(.{7})$/d,
+						regex: /^(.{2})(.{6})(.{28})(.{4})(.{7})(.{5})(.{255})(?<decimal1_2>[^.]{8})(.{15})(.{7})$/d,
 						length: 10
 					},
 					oc: {
@@ -980,22 +980,48 @@
 
 			/* TO DO - refactor and put this into processOrderInterface function, because order interface is completely different */
 			if (fileType == 'orders') {
+				
 				let orderSplitLines = reader.result.split(/\r\n|\n/);
 
 				// we need to find the empty line which separates each order, one way "could" be using orderSplitLines[i].charCodeAt(0) so when the length of the line is 1 and the ASCII value is 13, we know it "should" be a separator;
-				let orders = [];
+
+				processOrderInterface();
+				
 				let ordersRegex = pattern[fileType];
 				
 				orderSplitLines.map(o => {
 					let orderLine = o.slice(0, 2).toLowerCase();
-					
 					let interfaceLength = ordersRegex[orderLine].length;
 					let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
 					
 					let matches = ordersRegex[orderLine].regex.exec(o);
 					let line = o.replace(ordersRegex[orderLine].regex, captureGroups);
+					if (matches.groups !== undefined) {
+						let convertedValues = [];
+						let convertedValuesIndexes = [];
+						let groupIndices = Object.values(matches.indices.groups);
+						let groups = matches.groups;
+						
+						Object.entries(groups).map(val => {
+							let decimal = val[0].split('_')[1];
+							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+						});
+					
+						Object.values(matches.indices.groups).map(group => {
+						matches.indices.map((match, k) => {
+							if (JSON.stringify(group) == JSON.stringify(match)) {
+								convertedValuesIndexes.push(k);
+							}
+						});
+					});
+					let finalLine = line.split(',');
+	      	for (let j = 0; j < convertedValuesIndexes.length; j++) {
+          	let index = convertedValuesIndexes[j] - 1;
+						finalLine[index] = convertedValues[j];
+        	}
+					csvData.push(finalLine + '\n');
+					}
 				});
-				
 			}
 			
 
