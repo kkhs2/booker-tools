@@ -978,25 +978,29 @@
 
 			csvData.push(heading[fileType] + '\n');
 
-			/* TO DO - refactor and put this into processOrderInterface function, because order interface is completely different */
+			/* TO DO - refactor and put this into a processOrderInterface function, because order interface is completely different */
 			if (fileType == 'orders') {
+
+				
 				
 				let orderSplitLines = reader.result.split(/\r\n|\n/);
 
 				// we need to find the empty line which separates each order, one way "could" be using orderSplitLines[i].charCodeAt(0) so when the length of the line is 1 and the ASCII value is 13, we know it "should" be a separator;
-
-				processOrderInterface();
 				
 				let ordersRegex = pattern[fileType];
 				
 				orderSplitLines.map(o => {
+					if (o.length == 0) return;
 					let orderLine = o.slice(0, 2).toLowerCase();
+					
 					let interfaceLength = ordersRegex[orderLine].length;
 					let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
 					
 					let matches = ordersRegex[orderLine].regex.exec(o);
 					let line = o.replace(ordersRegex[orderLine].regex, captureGroups);
-					if (matches.groups !== undefined) {
+					// if matches.groups == undefined then that means there are no named groups for this line 
+					
+					if (matches !== null && matches.groups !== undefined) {
 						let convertedValues = [];
 						let convertedValuesIndexes = [];
 						let groupIndices = Object.values(matches.indices.groups);
@@ -1020,9 +1024,11 @@
 						finalLine[index] = convertedValues[j];
         	}
 					csvData.push(finalLine + '\n');
-					}
+					} 
 				});
+				
 			}
+		
 			
 
 			let splitLines = reader.result.split(/\r\n|\n/);
