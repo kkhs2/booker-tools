@@ -854,7 +854,14 @@
 			productinpromoset: 'INTPRDPR-SET-ID,INTPRDPR-SUCODE,INTPRDPR-ISDEL',
 			customer: 'INTCUST-CUSTNO,INTCUST-DATA.,INTCUST-WEB-BRANCH-ID,INTCUST-HOME-BRANCH,INTCUST-TITLE,INTCUST-SURNAME,INTCUST-FIRSTNAME,INTCUST-TRADING-NAME,INTCUST-STREET2,INTCUST-STREET3,INTCUST-HOUSE-NUMBER,INTCUST-STREET,INTCUST-STREET4,INTCUST-STREET5,INTCUST-CITY,INTCUST-DISTRICT,INTCUST-POSTCODE,INTCUST-TELEPHONE,INTCUST-MOBILE-PHONE,INTCUST-FAX,INTCUST-EMAIL-ADDRESS,INTCUST-CON-PREF-MAIL,INTCUST-CON-PREF-TELEPHONE,INTCUST-CON-PREF-EMAIL,INTCUST-CON-PREF-MOBILE,INTCUST_LICENCED,INTCUST-CAN-SHOP,INTCUST-CAN-DELIVER,INTCUST-FACIA-TYPE,INTCUST-CLASSIFICATION,INTCUST-BUSINESS-TYPE,INTCUST-GROUP-SECTOR,INTCUST-ISDEL,INTCUST-STATUS,INTCUST-ONSTOP-FLAG,INTCUST-SOP-FLAG,INTCUST-NACNO,DS_VDD_FLAG,INTCUST-USE-PROD-CD,INCUST-BRP-CUST-NO,INCUST-BRP-LEAFLET-SCHEME,INCUST-SALESMAN-CODE,INCUST-TOBACCO-CLUB',
 			custrec: 'INTCUST-CUSTNO,INTCUST-DATA.,INTCUST-WEB-BRANCH-ID,INTCUST-BUSINESS-OWNER-NAME,INTCUST-TITLE,INTCUST-SURNAME,INTCUST-FIRSTNAME,INTCUST-TRADING-NAME,INTCUST-STREET2,INTCUST-STREET3,INTCUST-HOUSE-NUMBER,INTCUST-STREET,INTCUST-STREET4,INTCUST-STREET5,INTCUST-CITY,INTCUST-DISTRICT,INTCUST-POSTCODE,INTCUST-TELEPHONE,INTCUST-MOBILE-PHONE,INTCUST-FAX,INTCUST-EMAIL-ADDRESS,INTCUST-CON-PREF-MAIL,INTCUST-CON-PREF-TELEPHONE,INTCUST-CON-PREF-EMAIL,INTCUST-CON-PREF-MOBILE,INTCUST_LICENCED,INTCUST-CLASSIFICATION,INTCUST-STATUS,INTCUST-VAT-REG-NO,INTCUST-NEW-CUSTOMER-TYPE,INTCUST-CUSTOMER-REFERRED-BY,INTCUST-CHARITY-NUMBER,INTCUST-DATE-TERMS-ACCEPTED,INTCUST-REGISTERED-BY,INTCUST-WEB-TITLE,INTCUST-WEB-FIRSTNAME,INTCUST-WEB-SURNAME,INTCUST-WEB-EMAIL-ADDRESS,INTCUST-CAN-EMAIL,INTCUST-AFILIATED-CAN-EMAIL,INTCUST-WEB-WEB-SECTOR,INTCUST-WEB-DATE-REGISTERED,INTCUST-DATE-CHANGED,INTCUST-TIME-CHANGED,INTCUST-FACIA-TYPE,PAPER-COPY-STATEMENT-FLAG,DS-ACTIVE-FLAG,DS-DATE-ACTIVE,DS-DATE-INACTIVE',
-			orders: 'INTCORD-FH-RECTYPE,INTCORD-FH-FILE-NUM,INTCORD-FH-FILE-DATE,INTCORD-FH-FILE-TIME,INTCORD-OH-RECTYPE,INTCORD-OH-STORE-ID,INTCORD-OH-CUSTNO,INTCORD-OH-ORDER-PO,INTCORD-OH-ORDER- TYPE,INTCORD-OH-ORDER-NUM,INTCORD-OH-ORDER-DATE,INTCORD-OH-ORDER-TIME,INTCORD-OH-CARD-PAID,INTCORD-OH-AUTH-AMOUNT,INTCORD-OH-AUTH-EXPIRY,INTCORD-DELIVERY-DATE,INTCORD-ORDER-SOURCE,INTCORD-CUST-PO-NBR,INTCORD-COLLECTION-TIME,INTCORD-MOBILE-NUM,INTCORD-COLLECT-DELIVERED,INTCORD-E-MAIL REQUIRED,SUPPLIER-SUPPNO,INTCORD-STORE-ORDER-GROUP,INTCORD-LONDIS-ORDER-GROUP,INTCORD-OD-RECTYPE,INTCORD-OD-SUCODE,INTCORD-OD-DESC,INTCORD-OD-ITM-IN-SELL-UNT,INTCORD-OD-PCK-SIZE,INTCORD-OD-QUANTITY,INTCORD-OD-NOTES,INTCORD-OD-PRICE,SUPPLIER-OWN-ITEM-CODE,MARKETPLACE-PRODUCT-CODE,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OT-RECTYPE,INTCORD-OT-DEPOT,INTCORD-OT-CUSTOMER-NUM,INTCORD-OT-ORDER-NUM,INTCORD-OT-DET-LINE-CNT,LINE FEED / CR,INTCORD-FL-RECTYPE,INTCORD-FL-FILE-NUM,INTCORD-FL-ORDERS-CNT',
+			orders: {
+				fh: 'INTCORD-FH-RECTYPE,INTCORD-FH-FILE-NUM,INTCORD-FH-FILE-DATE,INTCORD-FH-FILE-TIME', 
+				oh: 'INTCORD-OH-RECTYPE,INTCORD-OH-STORE-ID,INTCORD-OH-CUSTNO,INTCORD-OH-ORDER-PO,INTCORD-OH-ORDER- TYPE,INTCORD-OH-ORDER-NUM,INTCORD-OH-ORDER-DATE,INTCORD-OH-ORDER-TIME,INTCORD-OH-CARD-PAID,INTCORD-OH-AUTH-AMOUNT,INTCORD-OH-AUTH-EXPIRY,INTCORD-DELIVERY-DATE,INTCORD-ORDER-SOURCE,INTCORD-CUST-PO-NBR,INTCORD-COLLECTION-TIME,INTCORD-MOBILE-NUM,INTCORD-COLLECT-DELIVERED,INTCORD-E-MAIL REQUIRED,SUPPLIER-SUPPNO,INTCORD-STORE-ORDER-GROUP,INTCORD-LONDIS-ORDER-GROUP',
+				od: 'INTCORD-OD-RECTYPE,INTCORD-OD-SUCODE,INTCORD-OD-DESC,INTCORD-OD-ITM-IN-SELL-UNT,INTCORD-OD-PCK-SIZE,INTCORD-OD-QUANTITY,INTCORD-OD-NOTES,INTCORD-OD-PRICE,SUPPLIER-OWN-ITEM-CODE,MARKETPLACE-PRODUCT-CODE',
+				oc: 'INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT',
+				ot: 'INTCORD-OT-RECTYPE,INTCORD-OT-DEPOT,INTCORD-OT-CUSTOMER-NUM,INTCORD-OT-ORDER-NUM,INTCORD-OT-DET-LINE-CNT',
+				fl: 'INTCORD-FL-RECTYPE,INTCORD-FL-FILE-NUM,INTCORD-FL-ORDERS-CNT'   
+			},
 			confirm: 'INTSETT-STORE-ID,INTSETT-CUSTOMER-NUM,INTSETT-ORDER-NUM,INTSETT-TOTAL-INC-VAT,INTSETT-CARD-TYPE,INTSETT-CONF_IND,INTSETT-DATE,INTSETT-TIME',
 			depot: 'INTDEPOT-STORE,INTDEPOT-STORE-ID,INTDEPOT-HUB-ID,INTDEPOT-NAME,INTDEPOT-ADDR1,INTDEPOT-ADDR2,INTDEPOT-ADDR3,INTDEPOT-ADDR4,INTDEPOT-ADDR5,INTDEPOT-ADDR6,INTDEPOT-CONTACT,INTDEPOT-EMAIL,INTDEPOT-TEL,INTDEPOT-FAX,INTDEPOT-ISDEL,INTDEPOT-COUNTRY',
 			ohrs: 'INTOHRS-STORE,INTOHRS-STORE-ID,INTOHRS-TW-WC,INTOHRS-TW-MON-OPEN-HR,INTOHRS-TW-MON-CLOSE-HR,INTOHRS-TW-TUE-OPEN-HR,INTOHRS-TW-TUE-CLOSE-HR,INTOHRS-TW-WED-OPEN-HR,INTOHRS-TW-WED-CLOSE-HR,INTOHRS-TW-THU-OPEN-HR,INTOHRS-TW-THU-CLOSE-HR,INTOHRS-TW-FRI-OPEN-HR,INTOHRS-TW-FRI-CLOSE-HR,INTOHRS-TW-SAT-OPEN-HR,INTOHRS-TW-SAT-CLOSE-HR,INTOHRS-TW-SUN-OPEN-HR,INTOHRS-TW-SUN-CLOSE-HR,INTOHRS-NW-WC,INTOHRS-NW-MON-OPEN-HR,INTOHRS-NW-MON-CLOSE-HR,INTOHRS-NW-TUE-OPEN-HR,INTOHRS-NW-TUE-CLOSE-HR,INTOHRS-NW-WED-OPEN-HR,INTOHRS-NW-WED-CLOSE-HR,INTOHRS-NW-THU-OPEN-HR,INTOHRS-NW-THU-CLOSE-HR,INTOHRS-NW-FRI-OPEN-HR,INTOHRS-NW-FRI-CLOSE-HR,INTOHRS-NW-SAT-OPEN-HR,INTOHRS-NW-SAT-CLOSE-HR,INTOHRS-NW-SUN-OPEN-HR,INTOHRS-NW-SUN-CLOSE-HR',
@@ -949,45 +956,8 @@
 	}
 
 	/* Order interface is a lot different to the others */
-	function processOrderInterface() {
-		
-				
-		
-	}
-
-	/* TO DO - refactor readFile function as it is very big at the moment. */
-	function readFile(input) {			
-
-		let file = input.files[0];
-		let reader = new FileReader();
-
-		reader.readAsText(file);
-
-		let csvData = [];
-
-		/* Clear the previous "click here to download" link if exists */
-		document.getElementById('downloadFile').innerHTML = '';
-		
-		reader.onload = function() {
-
-			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match and we need to tell exactly which file the user is uploading. Need to actually match the file name properly. The assumption here is that the user gets the file and doesn't rename it, so the format will always be <EBIZ or CORD>_<interface name><load of numbers.ext>, extract the interface name from in between */
-			
-			let interface = file.name.match(/((EBIZ_|CORD_))(?<interface>[a-z]+)(.*)/i);
-
-			let fileType = interface.groups.interface ? interface.groups.interface.toLowerCase() : '';
-
-			csvData.push(heading[fileType] + '\n');
-
-			/* TO DO - refactor and put this into a processOrderInterface function, because order interface is completely different */
-			if (fileType == 'orders') {
-
-				
-				
-				let orderSplitLines = reader.result.split(/\r\n|\n/);
-
-				// we need to find the empty line which separates each order, one way "could" be using orderSplitLines[i].charCodeAt(0) so when the length of the line is 1 and the ASCII value is 13, we know it "should" be a separator;
-				
-				let ordersRegex = pattern[fileType];
+	function processOrderInterface(lines) {
+		let ordersRegex = pattern[fileType];
 				
 				orderSplitLines.map(o => {
 					if (o.length == 0) return;
@@ -1027,11 +997,102 @@
 					} 
 				});
 				
-			}
 		
+	}
+
+	/* TO DO - refactor readFile function as it is very big at the moment. */
+	function readFile(input) {			
+
+		let file = input.files[0];
+		let reader = new FileReader();
+
+		reader.readAsText(file);
+
+		let csvData = [];
+
+		/* Clear the previous "click here to download" link if exists */
+		document.getElementById('downloadFile').innerHTML = '';
+		
+		reader.onload = function() {
+
+			/* using includes in the file name is a bit crap because for example, product and productgroup will both return a match and we need to tell exactly which file the user is uploading. Need to actually match the file name properly. The assumption here is that the user gets the file and doesn't rename it, so the format will always be <EBIZ or CORD>_<interface name><load of numbers.ext>, extract the interface name from in between */
+			
+			let interface = file.name.match(/((EBIZ_|CORD_))(?<interface>[a-z]+)(.*)/i);
+
+			let fileType = interface.groups.interface ? interface.groups.interface.toLowerCase() : '';
+
+			csvData.push(heading[fileType] + '\n');
+
+			/* TO DO - refactor and put this into a processOrderInterface function, because order interface is different */
+			/*if (fileType == 'orders') {
+				
+				let orderSplitLines = reader.result.split(/\r\n|\n/);
+				console.log(orderSplitLines);
+
+				processOrderInterface(orderSplitLines);
+
+				// we need to find the empty line which separates each order, one way "could" be using orderSplitLines[i].charCodeAt(0) so when the length of the line is 1 and the ASCII value is 13, we know it "should" be a separator;
+				
+				
+				
+			} else {
+				*/
 			
 
 			let splitLines = reader.result.split(/\r\n|\n/);
+			let lines = splitLines.filter((line) => line.length > 0);
+
+			if (fileType == 'orders') {
+				/* for orders, each line needs to match the regex because they have different headers, for now we are repeating loads of code, we'll need to refactor and sort out this mess later on */
+				lines.map(line => {
+					let header = line.substring(0, 2).toLowerCase();
+					let interfaceLength = pattern[fileType][header].length;
+
+					/* how do we want to represent the orders data in the csv file? For now, let's just add the OH data  against each OD line  */
+
+					let regex = pattern[fileType][header].regex;
+			
+					let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
+					
+					let matches = regex.exec(line);
+					let currentLine = line.replace(regex, captureGroups);
+
+					if (matches.groups !== undefined) {
+						let convertedValues = [];
+						let convertedValuesIndexes = [];
+						let groupIndices = Object.values(matches.indices.groups);
+						let groups = matches.groups;
+					 
+						Object.entries(groups).map(val => {
+							let decimal = val[0].split('_')[1];
+							// convertedValues holds the values with their respective decimal places
+							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+							
+						});
+
+						
+
+					Object.values(matches.indices.groups).map(group => {
+						matches.indices.map((match, k) => {
+							if (JSON.stringify(group) == JSON.stringify(match)) {
+								convertedValuesIndexes.push(k);
+							}
+						});
+					});
+					let finalLine = currentLine.split(',');
+					console.log(convertedValues);
+	      	for (let j = 0; j < convertedValuesIndexes.length; j++) {
+          	let index = convertedValuesIndexes[j] - 1;
+						finalLine[index] = convertedValues[j];
+						
+        	}
+					
+					csvData.push(finalLine + '\n');
+						
+					}
+											
+				});
+			}
 
 			let interfaceLength = pattern[fileType].length;
 		
@@ -1041,6 +1102,7 @@
 
 			splitLines.map(line => {
 				// check against whitespaces / empty lines in the file
+
 				if (line.length > 0) {
 					let matches = regex.exec(line);
 					let currentLine = line.replace(regex, captureGroups);
@@ -1072,6 +1134,7 @@
 					}
 				}
 			});
+		//}
 			let newFile = new File(csvData, { 
 				type: 'text/csv;charset=utf-8,' 
 			});
@@ -1081,7 +1144,7 @@
 			let csvFileLink = document.createElement('a')
 			csvFileLink.setAttribute('href', objUrl);
 			csvFileLink.setAttribute('download', file.name + 'ConvertedFile.csv');
-			csvFileLink.textContent = 'Click to download converted csv file';
+			csvFileLink.textContent = 'Click to download converted ' + fileType.toUpperCase() + ' file';
 
 			document.getElementById('downloadFile').append(csvFileLink);
   	};
