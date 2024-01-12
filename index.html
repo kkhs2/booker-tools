@@ -926,7 +926,7 @@
 						length: 10
 					},
 					oc: {
-						regex: /^(.{2})(.{1})(.{254})$/d,
+						regex: /^(.{2})(.{1})(.{1,254})$/d,
 						length: 3
 					},
 					ot: {
@@ -956,47 +956,56 @@
 	}
 
 	/* Order interface is a lot different to the others */
-	function processOrderInterface(lines) {
-		let ordersRegex = pattern[fileType];
-				
-				orderSplitLines.map(o => {
-					if (o.length == 0) return;
-					let orderLine = o.slice(0, 2).toLowerCase();
+	function processOrderInterface(lines, type) {
+		let ordersData = [];
+		let headerIndexes = [];
+		lines.filter(function(l) {
+			return l != 'ft' && l.length != 0;			
+		}).map((line, i) => {
+			let header = line.substring(0, 2).toLowerCase();
+			let interfaceLength = pattern[type][header].length;
 					
-					let interfaceLength = ordersRegex[orderLine].length;
-					let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
+			let regex = pattern[type][header].regex;
+			
+			let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
 					
-					let matches = ordersRegex[orderLine].regex.exec(o);
-					let line = o.replace(ordersRegex[orderLine].regex, captureGroups);
-					// if matches.groups == undefined then that means there are no named groups for this line 
-					
-					if (matches !== null && matches.groups !== undefined) {
+			let matches = regex.exec(line);
+			
+			let currentLine = line.replace(regex, captureGroups);
+
+			/* need a way to construct the lines, to add each oh type line to od type */
+			if (header == 'oh') {
+				headerIndexes.push(i);
+			}
+
+			console.log(headerIndexes)
+			
+			if (matches.groups !== undefined) {
 						let convertedValues = [];
 						let convertedValuesIndexes = [];
 						let groupIndices = Object.values(matches.indices.groups);
 						let groups = matches.groups;
-						
 						Object.entries(groups).map(val => {
 							let decimal = val[0].split('_')[1];
 							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
 						});
-					
-						Object.values(matches.indices.groups).map(group => {
+					Object.values(matches.indices.groups).map(group => {
 						matches.indices.map((match, k) => {
 							if (JSON.stringify(group) == JSON.stringify(match)) {
 								convertedValuesIndexes.push(k);
 							}
 						});
 					});
-					let finalLine = line.split(',');
-	      	for (let j = 0; j < convertedValuesIndexes.length; j++) {
+					let finalLine = currentLine.split(',');
+					for (let j = 0; j < convertedValuesIndexes.length; j++) {
           	let index = convertedValuesIndexes[j] - 1;
 						finalLine[index] = convertedValues[j];
         	}
-					csvData.push(finalLine + '\n');
-					} 
-				});
-				
+					ordersData.push(finalLine + '\n');
+					} else {
+						ordersData.push(currentLine + '\n');
+					}
+		});
 		
 	}
 
@@ -1023,77 +1032,14 @@
 
 			csvData.push(heading[fileType] + '\n');
 
-			/* TO DO - refactor and put this into a processOrderInterface function, because order interface is different */
-			/*if (fileType == 'orders') {
-				
-				let orderSplitLines = reader.result.split(/\r\n|\n/);
-				console.log(orderSplitLines);
-
-				processOrderInterface(orderSplitLines);
-
-				// we need to find the empty line which separates each order, one way "could" be using orderSplitLines[i].charCodeAt(0) so when the length of the line is 1 and the ASCII value is 13, we know it "should" be a separator;
-				
-				
-				
-			} else {
-				*/
-			
-
 			let splitLines = reader.result.split(/\r\n|\n/);
 			let lines = splitLines.filter((line) => line.length > 0);
-
-			if (fileType == 'orders') {
-				/* for orders, each line needs to match the regex because they have different headers, for now we are repeating loads of code, we'll need to refactor and sort out this mess later on */
-				lines.map(line => {
-					let header = line.substring(0, 2).toLowerCase();
-					let interfaceLength = pattern[fileType][header].length;
-
-					/* how do we want to represent the orders data in the csv file? For now, let's just add the OH data  against each OD line  */
-
-					let regex = pattern[fileType][header].regex;
 			
-					let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
-					
-					let matches = regex.exec(line);
-					let currentLine = line.replace(regex, captureGroups);
-
-					if (matches.groups !== undefined) {
-						let convertedValues = [];
-						let convertedValuesIndexes = [];
-						let groupIndices = Object.values(matches.indices.groups);
-						let groups = matches.groups;
-					 
-						Object.entries(groups).map(val => {
-							let decimal = val[0].split('_')[1];
-							// convertedValues holds the values with their respective decimal places
-							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
-							
-						});
-
-						
-
-					Object.values(matches.indices.groups).map(group => {
-						matches.indices.map((match, k) => {
-							if (JSON.stringify(group) == JSON.stringify(match)) {
-								convertedValuesIndexes.push(k);
-							}
-						});
-					});
-					let finalLine = currentLine.split(',');
-					console.log(convertedValues);
-	      	for (let j = 0; j < convertedValuesIndexes.length; j++) {
-          	let index = convertedValuesIndexes[j] - 1;
-						finalLine[index] = convertedValues[j];
-						
-        	}
-					
-					csvData.push(finalLine + '\n');
-						
-					}
-											
-				});
-			}
-
+			if (fileType == 'orders') {
+				processOrderInterface(lines, fileType);
+				
+			} else {
+		
 			let interfaceLength = pattern[fileType].length;
 		
 			let regex = pattern[fileType].regex;
@@ -1134,7 +1080,7 @@
 					}
 				}
 			});
-		//}
+		}
 			let newFile = new File(csvData, { 
 				type: 'text/csv;charset=utf-8,' 
 			});
@@ -1331,6 +1277,10 @@
 			function addLine() {
 				console.log(line);
 			}
+
+			function addCombo() {
+
+			}
 			
 			return (
 				<div>
@@ -1340,6 +1290,7 @@
 				</div>
 			)
 		}
+
 	
 		const container = document.getElementById('createCustomerFile');
 		const root = ReactDOM.createRoot(container);
