@@ -1006,7 +1006,8 @@
 				}
 				let finalLine = currentLine.split(',');
 
-					if (header == 'od' || header == 'oc') {
+				/* sack off oc for now */
+					if (header == 'od' /*|| header == 'oc'*/) {
 							
 						headerLine = convertLine(lines[headerIndexes[headerIndexes.length-1]], pattern[type]['oh'].regex, captureGroupString(pattern[type]['oh'].length).slice(0, -1)) + ',';
 					
@@ -1015,13 +1016,12 @@
 						finalLine[index] = convertedValues[j];
         	}
 					finalLine = headerLine.concat(finalLine);
-		
 					ordersData.push(finalLine + '\n');
 				}
 				
 				
 			}); 
-			console.log(ordersData);
+			return ordersData;
 		}
 
 	/* TO DO - refactor readFile function as it is very big at the moment. */
@@ -1049,7 +1049,7 @@
 			let lines = splitLines.filter((line) => line.length > 0);
 			
 			if (fileType == 'orders') {
-				processOrderInterface(heading[fileType],     lines, fileType);
+				csvData =	processOrderInterface(heading[fileType], lines, fileType);
 				
 			} else {
 			csvData.push(heading[fileType] + '\n');	
