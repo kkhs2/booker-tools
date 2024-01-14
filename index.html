@@ -969,6 +969,7 @@
 		lines.filter(function(l) {
 			return l != 'ft' && l != 'fh' && l.length != 0;			
 		}).map(function(line, i) {
+			console.log(line);
 			let header = line.substring(0, 2).toLowerCase();
 			let interfaceLength = pattern[type][header].length;
 					
@@ -989,14 +990,16 @@
 			//if (matches.groups !== undefined) {
 				let convertedValues = [];
 				let convertedValuesIndexes = [];
-				let groupIndices = (matches.indices.groups) ? Object.values(matches.indices.groups) : null;   
-				let groups = (matches.groups) ? matches.groups : null;
+				let groupIndices = matches.indices.groups ? Object.values(matches.indices.groups) : null;
+				let groups = matches.groups || null;
+
 				if (groups != null) { 
 				Object.entries(groups).map(val => {
 					let decimal = val[0].split('_')[1];
 					convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
 						});
-					Object.values(matches.indices.groups).map(group => {
+					//Object.values(matches.indices.groups).map(group => {
+					groupIndices.map(group => {
 						matches.indices.map((match, k) => {
 							if (JSON.stringify(group) == JSON.stringify(match)) {
 								convertedValuesIndexes.push(k);
@@ -1024,7 +1027,7 @@
 			return ordersData;
 		}
 
-	/* TO DO - refactor readFile function as it is very big at the moment. */
+	/* TO DO - refactor readFile function as it is very big at the moment, and contains repeated code with the order interface processing */
 	function readFile(input) {			
 
 		let file = input.files[0];
@@ -1034,7 +1037,7 @@
 
 		let csvData = [];
 
-		/* Clear the previous "click here to download" link if exists */
+		/* Clear the previous "click here to download" link if one already exists */
 		document.getElementById('downloadFile').innerHTML = '';
 		
 		reader.onload = function() {
