@@ -955,13 +955,20 @@
 		}
 	}
 
+	/* helper function to convert a line with the given regex, useful especially for the Orders Interface */
+	function convertLine(line, regex, groups) {
+		return line.replace(regex, groups);
+	}
+
 	/* Order interface is a lot different to the others */
-	function processOrderInterface(lines, type) {
+	function processOrderInterface(heading, lines, type) {
 		let ordersData = [];
 		let headerIndexes = [];
+		let headerLine = [];
+		ordersData.push(heading['oh'] + heading['od'] + '\n');
 		lines.filter(function(l) {
-			return l != 'ft' && l.length != 0;			
-		}).map((line, i) => {
+			return l != 'ft' && l != 'fh' && l.length != 0;			
+		}).map(function(line, i) {
 			let header = line.substring(0, 2).toLowerCase();
 			let interfaceLength = pattern[type][header].length;
 					
@@ -970,24 +977,24 @@
 			let captureGroups = captureGroupString(interfaceLength).slice(0, -1);
 					
 			let matches = regex.exec(line);
-			
-			let currentLine = line.replace(regex, captureGroups);
+
+			let currentLine = convertLine(line, regex, captureGroups);
 
 			/* need a way to construct the lines, to add each oh type line to od type */
 			if (header == 'oh') {
 				headerIndexes.push(i);
-			}
+			} 
 
-			console.log(headerIndexes)
-			
-			if (matches.groups !== undefined) {
-						let convertedValues = [];
-						let convertedValuesIndexes = [];
-						let groupIndices = Object.values(matches.indices.groups);
-						let groups = matches.groups;
-						Object.entries(groups).map(val => {
-							let decimal = val[0].split('_')[1];
-							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+			/* if matches.groups equals undefined, then it means there is no decimal values to convert */
+			//if (matches.groups !== undefined) {
+				let convertedValues = [];
+				let convertedValuesIndexes = [];
+				let groupIndices = (matches.indices.groups) ? Object.values(matches.indices.groups) : null;   
+				let groups = (matches.groups) ? matches.groups : null;
+				if (groups != null) { 
+				Object.entries(groups).map(val => {
+					let decimal = val[0].split('_')[1];
+					convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
 						});
 					Object.values(matches.indices.groups).map(group => {
 						matches.indices.map((match, k) => {
@@ -996,18 +1003,26 @@
 							}
 						});
 					});
-					let finalLine = currentLine.split(',');
-					for (let j = 0; j < convertedValuesIndexes.length; j++) {
+				}
+				let finalLine = currentLine.split(',');
+
+					if (header == 'od' || header == 'oc') {
+							
+						headerLine = convertLine(lines[headerIndexes[headerIndexes.length-1]], pattern[type]['oh'].regex, captureGroupString(pattern[type]['oh'].length).slice(0, -1)) + ',';
+					
+						for (let j = 0; j < convertedValuesIndexes.length; j++) {
           	let index = convertedValuesIndexes[j] - 1;
 						finalLine[index] = convertedValues[j];
         	}
-					ordersData.push(finalLine + '\n');
-					} else {
-						ordersData.push(currentLine + '\n');
-					}
-		});
+					finalLine = headerLine.concat(finalLine);
 		
-	}
+					ordersData.push(finalLine + '\n');
+				}
+				
+				
+			}); 
+			console.log(ordersData);
+		}
 
 	/* TO DO - refactor readFile function as it is very big at the moment. */
 	function readFile(input) {			
@@ -1030,16 +1045,14 @@
 
 			let fileType = interface.groups.interface ? interface.groups.interface.toLowerCase() : '';
 
-			csvData.push(heading[fileType] + '\n');
-
 			let splitLines = reader.result.split(/\r\n|\n/);
 			let lines = splitLines.filter((line) => line.length > 0);
 			
 			if (fileType == 'orders') {
-				processOrderInterface(lines, fileType);
+				processOrderInterface(heading[fileType],     lines, fileType);
 				
 			} else {
-		
+			csvData.push(heading[fileType] + '\n');	
 			let interfaceLength = pattern[fileType].length;
 		
 			let regex = pattern[fileType].regex;
