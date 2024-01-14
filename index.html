@@ -856,7 +856,7 @@
 			custrec: 'INTCUST-CUSTNO,INTCUST-DATA.,INTCUST-WEB-BRANCH-ID,INTCUST-BUSINESS-OWNER-NAME,INTCUST-TITLE,INTCUST-SURNAME,INTCUST-FIRSTNAME,INTCUST-TRADING-NAME,INTCUST-STREET2,INTCUST-STREET3,INTCUST-HOUSE-NUMBER,INTCUST-STREET,INTCUST-STREET4,INTCUST-STREET5,INTCUST-CITY,INTCUST-DISTRICT,INTCUST-POSTCODE,INTCUST-TELEPHONE,INTCUST-MOBILE-PHONE,INTCUST-FAX,INTCUST-EMAIL-ADDRESS,INTCUST-CON-PREF-MAIL,INTCUST-CON-PREF-TELEPHONE,INTCUST-CON-PREF-EMAIL,INTCUST-CON-PREF-MOBILE,INTCUST_LICENCED,INTCUST-CLASSIFICATION,INTCUST-STATUS,INTCUST-VAT-REG-NO,INTCUST-NEW-CUSTOMER-TYPE,INTCUST-CUSTOMER-REFERRED-BY,INTCUST-CHARITY-NUMBER,INTCUST-DATE-TERMS-ACCEPTED,INTCUST-REGISTERED-BY,INTCUST-WEB-TITLE,INTCUST-WEB-FIRSTNAME,INTCUST-WEB-SURNAME,INTCUST-WEB-EMAIL-ADDRESS,INTCUST-CAN-EMAIL,INTCUST-AFILIATED-CAN-EMAIL,INTCUST-WEB-WEB-SECTOR,INTCUST-WEB-DATE-REGISTERED,INTCUST-DATE-CHANGED,INTCUST-TIME-CHANGED,INTCUST-FACIA-TYPE,PAPER-COPY-STATEMENT-FLAG,DS-ACTIVE-FLAG,DS-DATE-ACTIVE,DS-DATE-INACTIVE',
 			orders: {
 				fh: 'INTCORD-FH-RECTYPE,INTCORD-FH-FILE-NUM,INTCORD-FH-FILE-DATE,INTCORD-FH-FILE-TIME', 
-				oh: 'INTCORD-OH-RECTYPE,INTCORD-OH-STORE-ID,INTCORD-OH-CUSTNO,INTCORD-OH-ORDER-PO,INTCORD-OH-ORDER- TYPE,INTCORD-OH-ORDER-NUM,INTCORD-OH-ORDER-DATE,INTCORD-OH-ORDER-TIME,INTCORD-OH-CARD-PAID,INTCORD-OH-AUTH-AMOUNT,INTCORD-OH-AUTH-EXPIRY,INTCORD-DELIVERY-DATE,INTCORD-ORDER-SOURCE,INTCORD-CUST-PO-NBR,INTCORD-COLLECTION-TIME,INTCORD-MOBILE-NUM,INTCORD-COLLECT-DELIVERED,INTCORD-E-MAIL REQUIRED,SUPPLIER-SUPPNO,INTCORD-STORE-ORDER-GROUP,INTCORD-LONDIS-ORDER-GROUP',
+				oh: 'INTCORD-OH-RECTYPE,INTCORD-OH-STORE-ID,INTCORD-OH-CUSTNO,INTCORD-OH-ORDER-TYPE,INTCORD-OH-ORDER-NUM,INTCORD-OH-ORDER-DATE,INTCORD-OH-ORDER-TIME,INTCORD-OH-CARD-PAID,INTCORD-OH-AUTH-AMOUNT,INTCORD-OH-AUTH-EXPIRY,INTCORD-DELIVERY-DATE,INTCORD-ORDER-SOURCE,INTCORD-CUST-PO-NBR,INTCORD-COLLECTION-TIME,INTCORD-MOBILE-NUM,INTCORD-COLLECT-DELIVERED,INTCORD-E-MAIL REQUIRED,SUPPLIER-SUPPNO,INTCORD-STORE-ORDER-GROUP,INTCORD-LONDIS-ORDER-GROUP',
 				od: 'INTCORD-OD-RECTYPE,INTCORD-OD-SUCODE,INTCORD-OD-DESC,INTCORD-OD-ITM-IN-SELL-UNT,INTCORD-OD-PCK-SIZE,INTCORD-OD-QUANTITY,INTCORD-OD-NOTES,INTCORD-OD-PRICE,SUPPLIER-OWN-ITEM-CODE,MARKETPLACE-PRODUCT-CODE',
 				oc: 'INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT,INTCORD-OC-RECTYPE,INTCORD-OC-COMMENT-TYPE,INTCORD-OC-COMMENT',
 				ot: 'INTCORD-OT-RECTYPE,INTCORD-OT-DEPOT,INTCORD-OT-CUSTOMER-NUM,INTCORD-OT-ORDER-NUM,INTCORD-OT-DET-LINE-CNT',
@@ -939,13 +939,14 @@
 					}
 				}
 		}
-	
+		let convertedValues = [];
+		let convertedValuesIndexes = [];
 	
 	const decimalValue = (decimal, value) => {
 		return parseFloat(value).toFixed(decimal);
 	}
 
-	function captureGroupString(length) {
+	const captureGroupString = (length) => {
 		if (length == 0 || length == undefined) {
 			return '';
 		} else {
@@ -955,21 +956,36 @@
 		}
 	}
 
+	const processDecimalValues = (groups, groupIndices, matches) => {
+		
+		Object.entries(groups).map(val => {
+			let decimal = val[0].split('_')[1];
+			convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
+		});
+		groupIndices.map(group => {
+			matches.indices.map((match, k) => {
+				if (JSON.stringify(group) == JSON.stringify(match)) {
+					convertedValuesIndexes.push(k);
+				}
+			});
+		});
+	}
+
 	/* helper function to convert a line with the given regex, useful especially for the Orders Interface */
-	function convertLine(line, regex, groups) {
+	const convertLine = (line, regex, groups) => {
 		return line.replace(regex, groups);
 	}
 
 	/* Order interface is a lot different to the others */
-	function processOrderInterface(heading, lines, type) {
+	const processOrderInterface = (heading, lines, type) => {
 		let ordersData = [];
 		let headerIndexes = [];
 		let headerLine = [];
-		ordersData.push(heading['oh'] + heading['od'] + '\n');
+		/* for orders we need to combine order header line to each order detail, ie each header can contain multiple order details lines */
+		ordersData.push(heading['oh'] + ',' + heading['od'] + '\n');
 		lines.filter(function(l) {
 			return l != 'ft' && l != 'fh' && l.length != 0;			
 		}).map(function(line, i) {
-			console.log(line);
 			let header = line.substring(0, 2).toLowerCase();
 			let interfaceLength = pattern[type][header].length;
 					
@@ -985,47 +1001,27 @@
 			if (header == 'oh') {
 				headerIndexes.push(i);
 			} 
-
-			/* if matches.groups equals undefined, then it means there is no decimal values to convert */
-			//if (matches.groups !== undefined) {
-				let convertedValues = [];
-				let convertedValuesIndexes = [];
-				let groupIndices = matches.indices.groups ? Object.values(matches.indices.groups) : null;
-				let groups = matches.groups || null;
-
-				if (groups != null) { 
-				Object.entries(groups).map(val => {
-					let decimal = val[0].split('_')[1];
-					convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
-						});
-					//Object.values(matches.indices.groups).map(group => {
-					groupIndices.map(group => {
-						matches.indices.map((match, k) => {
-							if (JSON.stringify(group) == JSON.stringify(match)) {
-								convertedValuesIndexes.push(k);
-							}
-						});
-					});
-				}
-				let finalLine = currentLine.split(',');
-
-				/* sack off oc for now */
-					if (header == 'od' /*|| header == 'oc'*/) {
-							
-						headerLine = convertLine(lines[headerIndexes[headerIndexes.length-1]], pattern[type]['oh'].regex, captureGroupString(pattern[type]['oh'].length).slice(0, -1)) + ',';
+			
+			let groupIndices = matches.indices.groups ? Object.values(matches.indices.groups) : null;
+			let groups = matches.groups ? matches.groups : null;
+			if (groups != null) { 
+				processDecimalValues(groups, groupIndices, matches);
+			}
+			let finalLine = currentLine.split(',');
+			/* sack off oc for now */
+			if (header == 'od' /*|| header == 'oc'*/) {
+				headerLine = convertLine(lines[headerIndexes[headerIndexes.length-1]], pattern[type]['oh'].regex, captureGroupString(pattern[type]['oh'].length).slice(0, -1)) + ',';
 					
-						for (let j = 0; j < convertedValuesIndexes.length; j++) {
-          	let index = convertedValuesIndexes[j] - 1;
-						finalLine[index] = convertedValues[j];
-        	}
-					finalLine = headerLine.concat(finalLine);
-					ordersData.push(finalLine + '\n');
-				}
-				
-				
-			}); 
-			return ordersData;
-		}
+				for (let j = 0; j < convertedValuesIndexes.length; j++) {
+          let index = convertedValuesIndexes[j] - 1;
+					finalLine[index] = convertedValues[j];
+        }
+				finalLine = headerLine.concat(finalLine);
+				ordersData.push(finalLine + '\n');
+			}
+		}); 
+		return ordersData;
+	}
 
 	/* TO DO - refactor readFile function as it is very big at the moment, and contains repeated code with the order interface processing */
 	function readFile(input) {			
@@ -1064,7 +1060,6 @@
 
 			splitLines.map(line => {
 				// check against whitespaces / empty lines in the file
-
 				if (line.length > 0) {
 					let matches = regex.exec(line);
 					let currentLine = line.replace(regex, captureGroups);
