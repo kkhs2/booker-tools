@@ -837,9 +837,9 @@
 		];
 
 		const heading = {
-			pricingstandard: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Promo Indicator,WSP Collect Price,Local Price Indicator,Standard WSP MIDAS FIELD,Standard WSP Delivered MIDAS FIELD,Start Date,End Date,Delivered Price,Online Exc Price,Click & Collect Price,Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,MUP WSP Collect Price,MUP Delivered Price,MUP Online Exclusive,MUP Click & Collect,MUP Spare,Promotion No,Prom Collect WSP,Prom Delivered Price,Prom Online Exclusive,Prom Click & Collect,Prom Spare,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Prom Start Date,Prom End Date',
-			pricingfascia: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Fascia Code,Promotion No,WSP Collect Price,WSP Delivered Price,WSP Online Exclusive,WSP Click & Collect Price,WSP Spare4,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare4,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Promotion Start,Promotion End',
-			pricingclub: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Club eg H13333,WSP Collect Price,WSP Delivered Price,WSP OE Price,WSP Click & Collect Price,WSP Spare4,Recommended Retail Price,POR,Delivered POR,OE POR,Click & Collect POR,Spare POR,Start Date, End Date',
+			stdprice: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Promo Indicator,WSP Collect Price,Local Price Indicator,Standard WSP MIDAS FIELD,Standard WSP Delivered MIDAS FIELD,Start Date,End Date,Delivered Price,Online Exc Price,Click & Collect Price,Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,MUP WSP Collect Price,MUP Delivered Price,MUP Online Exclusive,MUP Click & Collect,MUP Spare,Promotion No,Prom Collect WSP,Prom Delivered Price,Prom Online Exclusive,Prom Click & Collect,Prom Spare,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Prom Start Date,Prom End Date',
+			fasprice: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Fascia Code,Promotion No,WSP Collect Price,WSP Delivered Price,WSP Online Exclusive,WSP Click & Collect Price,WSP Spare4,Pre Promotion Price WSP,Pre Promotion Price Delivered,Pre Promotion Price OE,Pre Promotion Price Click & Collect,Pre Promotion Price Spare4,Recommended Retail Price,POR,Delivered POR,Online Exclusive POR,Click & Collect POR,Spare POR,Promotion Start,Promotion End',
+			clbprice: 'Date,Country Code,Depot Number,Child Article Code,Saleable Unit Code,Weight Type,Number of Items in a Case,Club eg H13333,WSP Collect Price,WSP Delivered Price,WSP OE Price,WSP Click & Collect Price,WSP Spare4,Recommended Retail Price,POR,Delivered POR,OE POR,Click & Collect POR,Spare POR,Start Date, End Date',
 			product: 'PRODTRAN-STORE-ID,PRODTRAN-HUB,PRODTRAN-SUCODE,PRODTRAN-ARTICLE-CODE,PRODTRAN-MIDAS-SPLIT-NUM,PRODTRAN-PRICE,PRODTRAN-ITM-IN-SELL-UNT,PRODTRAN-PROMO,PRODTRAN-UNITID,PRODTRAN-RRP,PRODTRAN-PREV-PRC,PRODTRAN-POR,PRODTRAN-ISNEW,PRODTRAN-ISDEL,PRODTRAN-LEAD-TIME-STATUS,PRODTRAN-PRICE-START,PRODTRAN-PRICE-END,PRODTRAN-STORE-ORDER-GROUP,PRODTRAN-LONDIS-ORDER-GROUP',
 			productgroup: 'INTPRODG-ARTICLE-CODE,INTPRODG-MIDAS-SPLIT-NUM,INTPRODG-NAME,INTPRODG-CATEGORYID,INTPRODG-PACK-SIZE,INTPRODG-ISDEL,INTPRODG-WEB-PARENT-ARTICLE-CODE,INTPRODG-SUCODE,INTPRODG-LONG-NAME,INTPRODG-WEIGHT-TYPE,INTPRODG-VAT-RATE,INTPRODG-SUPPLIER,INTPRODG-PACKDESC,INTPRODG-IMAGEPAID,INTPRODG-OWNBRAND,INTPRODG-STORAGE-TYPE,INTPRODG-ARTICLE-STATUS,INTPRODG-DELIST-REASON,INTPRODG-PARENT-ARTICLE-CODE,INTPRODG-WEB FLAG,INTPRODG-LONDIS-PROD-CD,INTPRODG-BUDGENS-PROD-CD,INTPRODG-PRICE-MARK-FLAG,INTPRODG-ITM-IN-SELL-UNT,INTPRODG-SHELF-LIFE,INTPRODG-MASTER-MIDAS-CODE,INTPRODG-HFSS-HIGH',
 			tnareasons: 'INTTNA-STORE-ID,INTTNA-MASTER_MCODE,INTTNA-REASON_CODE,INTTNA-REPLACEMENT_MASTER_MCODE,INTTNA-AVAILABLE_DATE',
@@ -888,28 +888,15 @@
 		}
 
 		const pattern = {
-			/*standard: {
-				regex: 
-				/^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
-				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48'
-			},
-			fascia: {
-				regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
-				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27'
-			},
-			club: {
-				regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/,
-				group: '$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21'
-			}*/
-			pricingstandard: {
+			stdprice: {
 					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z0]|\s)(\d{5,7}\.\d{2})([A-Z]|\s)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{8})(\d{8})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})([A-Z]\d{4}|\s+)(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/d,
 					length: 48
 				},
-				pricingfascia: {
+				fasprice: {
 					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})([A-Z]{2})(\w{5})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/d,
 					length: 27
 				},
-				pricingclub: {
+				clbprice: {
 					regex: /^(\d{8})([A-Z]{2})(\d{3})(\d{6})(\d{6})([A-Z])(\d{5,7}\.\d{2})(\w{6})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{5,7}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{2}\.\d{2})(\d{8})(\d{8})$/d,
 					length: 21
 				}, 
@@ -991,6 +978,11 @@
 	/* helper function to convert a line with the given regex, useful especially for the Orders Interface */
 	const convertLine = (line, regex, groups) => {
 		return line.replace(regex, groups);
+	}
+
+	/* claims is different as well? haven't seen the data for this yet so this is a placeholder at the moment */
+	const processClaimsInterface = () => {
+
 	}
 
 	/* Order interface is a lot different to the others */
@@ -1081,22 +1073,9 @@
 					let matches = regex.exec(line);
 					let currentLine = line.replace(regex, captureGroups);
 			 		if (matches.groups !== undefined) {
-						let convertedValues = [];
-						let convertedValuesIndexes = [];
-						let groupIndices = Object.values(matches.indices.groups);
-						let groups = matches.groups;
-						Object.entries(groups).map(val => {
-							let decimal = val[0].split('_')[1];
-							convertedValues.push(parseFloat(val[1].slice(0, -decimal) + '.' + val[1].slice(-decimal)));
-						});
+						
+						processDecimalValues(matches.groups, Object.values(matches.indices.groups), matches);
 					
-						Object.values(matches.indices.groups).map(group => {
-						matches.indices.map((match, k) => {
-							if (JSON.stringify(group) == JSON.stringify(match)) {
-								convertedValuesIndexes.push(k);
-							}
-						});
-					});
 					let finalLine = currentLine.split(',');
 	      	for (let j = 0; j < convertedValuesIndexes.length; j++) {
           	let index = convertedValuesIndexes[j] - 1;
@@ -1161,22 +1140,10 @@
       </div>
   </div>
 	
-	<!-- this is not really useful so sacking it off
-	<div class="container pt-3 pb-3">
-		<h3>Opening all products in one hit</h3>
-		<p>Ensure allowing pop ups in your browser is enabled</p>
-		<div class="mb-3">
-			<button class="btn btn-primary" onclick="licensed()">Licensed</button>
-			<button class="btn btn-primary" onclick="unlicensed()">Unlicensed</button>
-			<button class="btn btn-primary" onclick="oeLicensed()">OE Licensed</button>
-			<button class="btn btn-primary" onclick="oeUnlicensed()">OE Unlicensed</button>
-		</div>
-	</div> 
--->
 	<div class="container pt-3 pb-3">
 		
 		<h3>File converter</h3>
-		<p>The aim is to be able to convert all interfaces into readable csv format and JSON. Converts (so far) standard, fascia and club pricing files downloaded from Github, and product, product group and tnareason files from Getronics. Need to get the actual files from Getronics for all other interfaces to check each one works.</p>
+		<p>The aim is to be able to convert all interfaces into readable csv format and JSON. Need to get the actual files from Getronics for all interfaces to check each one actually works.</p>
 		<div class="mb-3">
 			<label for="label" class="form-label">File:</label>
 			<input type="file" class="form-control" name="fileConvert" id="fileConvert" onchange="readFile(this)"/>
@@ -1192,13 +1159,9 @@
 			<p>An attempt to make this quicker / easier?
 				A few points:
 				<ul>
-					<li>Red asterisk indicates required fields</li>
 					<li>Check GitHub to find the last account number created in order to not overwrite any current accounts</li>
 					<li>Accounts created should have the format of CustomerID@test.com</li>
-					<li>Only required fields are showing, non-required fields are created with spaces in the background, or with default values (such as addresses)</li>
 					<li>"Try" to create an option to create a combination of accounts with one hit of a button. The combination is based on Branch ID, Group Sector (which controls whether it is a Retailer/Caterer), Licenced</li>
-					<li>An option to add the values selected as a new line</li>
-					<li>An option to add the values selected and generate a useful combination of lines, based on business type, group sectors and tobacco club (but let's get one line to work first)</li>
 				</ul>
 			</p>
 			<div id="createCustomerFile"></div>
