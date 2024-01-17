@@ -941,6 +941,14 @@
 						regex: /^(.{2})(.{8})(.{8})$/d,
 						length: 3
 					}
+				},
+				bestsellers: {
+					regex: /^(.{2})(.{6})(.{7}$)/d,
+					length: 3
+				},
+				pricelist: {
+					regex: /^(.{6})(.{6})(.{6})(?<decimal1_2>[^.]{6})(?<decimal2_3>[^.]{6})(.{1})(.{15})(.{1})(?<decimal3_2>[^.]{6})$/d,
+					length: 9
 				}
 		}
 		let convertedValues = [];
