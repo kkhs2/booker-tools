@@ -261,11 +261,11 @@
 
 		const classification = {
 			'1A': '1A - GROCERY GENERAL STORE',
-'1C': '1C - DELICATESSEN STORES',
-'1D': '1D - DAIRYMEN',
-'1F': '1F - BUTCHERS',
-'1G': '1G - GREENGROCERS',
-'1J': '1J - FISHMONGERS',
+			'1C': '1C - DELICATESSEN STORES',
+			'1D': '1D - DAIRYMEN',
+			'1F': '1F - BUTCHERS',
+			'1G': '1G - GREENGROCERS',
+			'1J': '1J - FISHMONGERS',
 '1K': '1K - BAKERY SHOP',
 '4A': '4A - NON-FOOD STORES',
 '4B': '4B - FARM SHOPS',
@@ -707,7 +707,7 @@
 				type: 'radio',
 				values: yesOrNo,
 				required: true,
-				placeholder: 'Licenced?'
+				placeholder: 'Alcohol licence'
 			},
 			{
 				name: 'canShop',	
@@ -785,7 +785,6 @@
 				name: 'nacno', 
 				length: 6,
 				type: 'input',
-				required: true,
 				placeholder: 'National account number',
 				default: '000000'
 			},
@@ -1189,14 +1188,14 @@
 
 		function App() {
 			const [line, setLine] = useState({});
-
+			const [combination, setCombination] = useState({});
 
 		function Field({props}) {
 			if (props.type == 'select') {
 				return (
 				<div className="form-floating">
 					<select className="form-select" id={props.name} placeholder={props.placeholder} name={props.name} onChange={e => {setLine(e.target.value)}}>
-						<option value="">Please select</option>
+						<option key="null" value="">Please select</option>
 							{
 								Object.entries(props.values).map(([k, v]) => {
 									return (
@@ -1206,22 +1205,22 @@
 								
 							}
 					</select>
-					<label htmlFor="floatingSelect">{props.placeholder}</label>
+					<label htmlFor="floatingSelect"></label>
 				</div>
 				)
 			}
 			if (props.type == 'input') {
 				return (
 					<div className="form-floating mb-3">
-						<input type="text" className="form-control" placeholder={props.placeholder} name={props.name} maxLength={props.length}  value={props.default} />
-						<label forhtml="floatingInput">{props.placeholder}</label>
+						<input type="text" className="form-control" placeholder={props.placeholder} name={props.name} maxLength={props.length}  defaultValue={props.default} />
+						<label forhtml="floatingInput"></label>
 					</div>
 				)
 			}
 			if (props.type == 'radio') {
 				return (
 					<div onChange={e => {setLine(e.target.value)}}>
-						<label>{props.placeholder}</label>
+						<label for={e.name}>{props.placeholder}</label>
 						<div className="form-check">
 							<input type="radio" className="form-check-input" name={props.name} />
 							<label className="form-check-label" htmlFor="yesRadio">Yes</label>
@@ -1234,6 +1233,20 @@
 					</div>
 				)
 			}
+		}
+
+		function addLine() {
+
+		}
+
+		function createFile() {
+
+		}
+
+		/* TO DO - the aim here is to make a function which allows the customer to specify which combo they want to generate customers for. But for now let's keep it
+			simple and do the simple combos before getting too fancy */
+		function AddCombination() {
+
 		}
 
 		function Fields() {
@@ -1251,14 +1264,10 @@
 			)	
 		}
 
-		function createFile() {
-
-		}
-
 		function AddLineButton() {
 			return (
 				<div className="d-grid gap-2 mb-3">
-					<button type="submit" onClick={addLine} className="btn btn-outline-secondary">Add Line {setLine} </button>
+					<button type="submit" onClick={addLine} className="btn btn-outline-secondary">Add Line</button>
 				</div>	
 			)
 		}
@@ -1272,16 +1281,6 @@
 				</div>	
 			)
 		}
-
-			function addLine() {
-				console.log(line);
-			}
-
-			/* TO DO - the aim here is to make a function which allows the customer to specify which combo they want to generate customers for. But for now let's keep it
-			simple and do the simple combos before getting too fancy */
-			function addCombo() {
-
-			}
 			
 			return (
 				<div>
