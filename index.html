@@ -1236,7 +1236,7 @@
 			if (props.type == 'select') {
 				return (
 				<div className="form-floating">
-					<select className="form-select" id={props.name} placeholder={props.placeholder} name={props.name}>
+					<select className="form-select" id={props.name} placeholder={props.placeholder} name={props.name} value={inputs.name || ''} onChange={handleChange}>
 						<option key="null" value="">Please select</option>
 							{
 								Object.entries(props.values).map(([k, v]) => {
@@ -1254,7 +1254,7 @@
 			if (props.type == 'input') {
 				return (
 					<div className="form-floating mb-3">
-						<input type="text" className="form-control" placeholder={props.placeholder} name={props.name} maxLength={props.length}  defaultValue={props.default} />
+						<input type="text" className="form-control" placeholder={props.placeholder} name={props.name} maxLength={props.length} defaultValue={props.default} value={inputs.name || ''} onChange={handleChange} />
 						<label forhtml="floatingInput">{props.placeholder}</label>
 					</div>
 				)
@@ -1264,12 +1264,12 @@
 					<div>
 						<label forhtml={props.name}>{props.placeholder}</label>
 						<div className="form-check">
-							<input type="radio" className="form-check-input" name={props.name} onChange={updateData}/>
+							<input type="radio" className="form-check-input" name={props.name} onChange={handleChange}/>
 							<label className="form-check-label" htmlFor="yesRadio">Yes</label>
 						</div>
 
 						<div className="form-check">
-							<input type="radio" className="form-check-input" name={props.name} />
+							<input type="radio" className="form-check-input" name={props.name} onChange={handleChange} />
 							<label className="form-check-label" forhtml="noRadio">No</label>
 						</div>
 					</div>
@@ -1302,16 +1302,11 @@
 			);	
 		}
 
-		function handleSubmit(event) {
-			console.log(event);
-			event.preventDefault();
-
-		}
 
 		function AddLineButton() {
 			return (
 				<div className="d-grid gap-2 mb-3">
-					<button type="submit" onClick={onLineClick} className="btn btn-outline-secondary">Add Line</button>
+					<button type="submit" className="btn btn-outline-secondary">Add Line</button>
 				</div>	
 			)
 		}
@@ -1321,14 +1316,14 @@
 		function CreateFileButton() {
 			return (
 				<div className="d-grid gap-2 mb-3">
-					<button type="submit" className="btn booker" onClick={createFile}>Create File</button>
+					<button type="submit" className="btn booker">Create File</button>
 				</div>	
 			)
 		}
 			
 			return (
 				<div>
-					<form onSubmit={handleSubmit}>
+					<form>
 						<Fields />
 					</form>
 					<AddLineButton />
